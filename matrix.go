@@ -13,12 +13,15 @@ type Matrix struct {
 }
 
 // NewMatrix will return *Matrix
-func NewMatrix(row, column int) *Matrix {
+func NewMatrix(row, column int) (*Matrix, error) {
 	matrix := new(Matrix)
+	if row <= 0 || column <= 0 {
+		return nil, errors.New("Length is not greater equal 0")
+	}
 	matrix.rows = row
 	matrix.columns = column
 	matrix.matrix = make([]float64, matrix.rows*matrix.columns)
-	return matrix
+	return matrix, nil
 }
 
 // ZeroMatrix make all value 0

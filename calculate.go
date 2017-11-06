@@ -56,7 +56,33 @@ func (m *Matrix) Add(num interface{}) error {
 	return errors.New("The add type is not allowed")
 }
 
-// Sub
+// Sub will calculate sub of matrix
+func (m *Matrix) Sub(num interface{}) error {
+	if _, err := m.isNormal(); err != nil {
+		return err
+	}
+
+	if mat, ok := num.(Matrix); ok {
+		if !m.isSameSize(mat) {
+			return errors.New("The row and column num are different")
+		}
+		m.subByMatrix(mat)
+		return nil
+	} else if mat, ok := num.(*Matrix); ok {
+		if !m.isSameSize(*mat) {
+			return errors.New("The row and column num are different")
+		}
+		m.subByMatrix(*mat)
+		return nil
+	} else if mat, ok := num.(float64); ok {
+		m.subByFloat(mat)
+		return nil
+	} else if mat, ok := num.(int); ok {
+		m.subByFloat(float64(mat))
+		return nil
+	}
+	return errors.New("The sub op2 type is not allowed")
+}
 
 // Multi
 // MultiEach
