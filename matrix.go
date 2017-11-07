@@ -85,7 +85,7 @@ func (m *Matrix) At(row, column int) (float64, error) {
 	if err := m.checkThereValue(row, column); err != nil {
 		return 0, err
 	}
-	return m.matrix[column*(row-1)+column-1], nil
+	return m.matrix[m.columns*(row-1)+column-1], nil
 }
 
 // Set will set specifix value
@@ -93,6 +93,6 @@ func (m *Matrix) Set(row, column int, value float64) error {
 	if err := m.checkThereValue(row, column); err != nil {
 		return err
 	}
-	m.matrix[column*(row-1)+column-1] = value
+	m.matrix[m.columns*(row-1)+column-1] = value
 	return nil
 }
