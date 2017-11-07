@@ -32,6 +32,7 @@ func (m *Matrix) ZeroMatrix() {
 
 // MakeVector will create vector by array
 func (m *Matrix) MakeVector(row []float64) {
+	// TODO: check the vector
 	m.rows = 1
 	m.columns = len(row)
 	m.matrix = row
@@ -85,7 +86,7 @@ func (m *Matrix) At(row, column int) (float64, error) {
 	if err := m.checkThereValue(row, column); err != nil {
 		return 0, err
 	}
-	return m.matrix[column*(row-1)+column-1], nil
+	return m.matrix[m.columns*(row-1)+column-1], nil
 }
 
 // Set will set specifix value
@@ -93,6 +94,17 @@ func (m *Matrix) Set(row, column int, value float64) error {
 	if err := m.checkThereValue(row, column); err != nil {
 		return err
 	}
-	m.matrix[column*(row-1)+column-1] = value
+	m.matrix[m.columns*(row-1)+column-1] = value
+	return nil
+}
+
+// SetMatrix will set mat to this matrix
+func (m *Matrix) SetMatrix(mat Matrix) error {
+	if err := mat.checkNormal(); err != nil {
+		return errors.New("The matrix is broken")
+	}
+	m.rows = mat.rows
+	m.columns = mat.columns
+	m.matrix = mat.matrix
 	return nil
 }

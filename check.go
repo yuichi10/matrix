@@ -2,6 +2,7 @@ package matrix
 
 import (
 	"errors"
+	"fmt"
 )
 
 // checkBroken look the length of row and column if t
@@ -26,6 +27,13 @@ func (m *Matrix) checkThereValue(row, column int) error {
 func (m *Matrix) checkSameSize(mat Matrix) error {
 	if mat.rows != m.rows || mat.columns != m.columns {
 		return errors.New("The size is not same")
+	}
+	return nil
+}
+
+func (m *Matrix) checkCanMulti(mat Matrix) error {
+	if m.columns != mat.rows {
+		return fmt.Errorf("It cannot multi opt1 column is %v opt2 row is %v", m.columns, mat.rows)
 	}
 	return nil
 }

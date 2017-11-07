@@ -16,6 +16,31 @@ func (m *Matrix) addByMatrix(mat Matrix) {
 	}
 }
 
+// index will start from 1
+func (m *Matrix) multiAtIndex(mat Matrix, index int) float64 {
+	var val float64
+	r := (index) / mat.columns
+	c := (index) % mat.columns
+	for i := 0; i < m.columns; i++ {
+		val += m.matrix[i+r*m.columns] * mat.matrix[i*mat.columns+c]
+	}
+	return val
+}
+
+func (m *Matrix) multiByMatrix(mat Matrix) error {
+	matrix, err := NewMatrix(m.rows, mat.columns)
+	if err != nil {
+		return err
+	}
+	for i := 0; i < m.rows*mat.columns; i++ {
+		matrix.matrix[i] = m.multiAtIndex(mat, i)
+	}
+	if err := m.SetMatrix(*matrix); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (m *Matrix) subByFloat(num float64) {
 	for i := range m.matrix {
 		m.matrix[i] -= num
@@ -25,6 +50,12 @@ func (m *Matrix) subByFloat(num float64) {
 func (m *Matrix) addByFloat(num float64) {
 	for i := range m.matrix {
 		m.matrix[i] += num
+	}
+}
+
+func (m *Matrix) multiByFloat(num float64) {
+	for i := range m.matrix {
+		m.matrix[i] *= num
 	}
 }
 
@@ -84,6 +115,29 @@ func (m *Matrix) Sub(num interface{}) error {
 	return errors.New("The sub op2 type is not allowed")
 }
 
-// Multi
+// Multi will calculate Multi
+func (m *Matrix) Multi(num interface{}) error {
+	if mat, ok := num.(Matrix); ok {
+		if err := m.checkCanMulti(mat); err != nil {
+			return err
+		}
+		m.multiByMatrix(mat)
+		return nil
+	} else if mat, ok := num.(*Matrix); ok {
+		if err := m.checkCanMulti(*mat); err != nil {
+			return err
+		}
+		m.multiByMatrix(*mat)
+		return nil
+	} else if mat, ok := num.(float64); ok {
+		m.multiByFloat(float64(mat))
+		return nil
+	} else if mat, ok := num.(int); ok {
+		m.multiByFloat(float64(mat))
+		return nil
+	}
+	return errors.New("The multi op2 type is not allowed")
+}
+
 // MultiEach
 // Sep
