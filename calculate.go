@@ -30,7 +30,7 @@ func (m *Matrix) addByFloat(num float64) {
 
 // Add will add some value to Matrix
 func (m *Matrix) Add(num interface{}) error {
-	m.isNormal()
+	m.checkNormal()
 	if mat, ok := num.(Matrix); ok {
 		if mat.rows != m.rows || mat.columns != m.columns {
 			return errors.New("The row and column num are different")
@@ -58,19 +58,19 @@ func (m *Matrix) Add(num interface{}) error {
 
 // Sub will calculate sub of matrix
 func (m *Matrix) Sub(num interface{}) error {
-	if _, err := m.isNormal(); err != nil {
+	if err := m.checkNormal(); err != nil {
 		return err
 	}
 
 	if mat, ok := num.(Matrix); ok {
-		if !m.isSameSize(mat) {
-			return errors.New("The row and column num are different")
+		if err := m.checkSameSize(mat); err != nil {
+			return err
 		}
 		m.subByMatrix(mat)
 		return nil
 	} else if mat, ok := num.(*Matrix); ok {
-		if !m.isSameSize(*mat) {
-			return errors.New("The row and column num are different")
+		if err := m.checkSameSize(*mat); err != nil {
+			return err
 		}
 		m.subByMatrix(*mat)
 		return nil
