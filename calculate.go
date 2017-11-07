@@ -19,20 +19,20 @@ func (m *Matrix) addByMatrix(mat Matrix) {
 // index will start from 1
 func (m *Matrix) multiAtIndex(mat Matrix, index int) float64 {
 	var val float64
-	r := (index) / mat.columns
-	c := (index) % mat.columns
-	for i := 0; i < m.columns; i++ {
-		val += m.matrix[i+r*m.columns] * mat.matrix[i*mat.columns+c]
+	r := (index) / mat.column
+	c := (index) % mat.column
+	for i := 0; i < m.column; i++ {
+		val += m.matrix[i+r*m.column] * mat.matrix[i*mat.column+c]
 	}
 	return val
 }
 
 func (m *Matrix) multiByMatrix(mat Matrix) error {
-	matrix, err := NewMatrix(m.rows, mat.columns)
+	matrix, err := NewMatrix(m.row, mat.column)
 	if err != nil {
 		return err
 	}
-	for i := 0; i < m.rows*mat.columns; i++ {
+	for i := 0; i < m.row*mat.column; i++ {
 		matrix.matrix[i] = m.multiAtIndex(mat, i)
 	}
 	if err := m.SetMatrix(*matrix); err != nil {
@@ -63,14 +63,14 @@ func (m *Matrix) multiByFloat(num float64) {
 func (m *Matrix) Add(num interface{}) error {
 	m.checkNormal()
 	if mat, ok := num.(Matrix); ok {
-		if mat.rows != m.rows || mat.columns != m.columns {
+		if mat.row != m.row || mat.column != m.column {
 			return errors.New("The row and column num are different")
 		}
 		m.addByMatrix(mat)
 		return nil
 	}
 	if mat, ok := num.(*Matrix); ok {
-		if mat.rows != m.rows || mat.columns != m.columns {
+		if mat.row != m.row || mat.column != m.column {
 			return errors.New("The row and column num are different")
 		}
 		m.addByMatrix(*mat)

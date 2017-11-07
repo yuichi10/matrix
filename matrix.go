@@ -7,9 +7,9 @@ import (
 
 // Matrix has information of matrix
 type Matrix struct {
-	rows    int       // 行
-	columns int       // 列
-	matrix  []float64 // 行 * 列の長さ
+	row    int       // 行
+	column int       // 列
+	matrix []float64 // 行 * 列の長さ
 }
 
 // NewMatrix will return *Matrix
@@ -18,59 +18,59 @@ func NewMatrix(row, column int) (*Matrix, error) {
 	if row <= 0 || column <= 0 {
 		return nil, errors.New("Length is not greater equal 0")
 	}
-	matrix.rows = row
-	matrix.columns = column
-	matrix.matrix = make([]float64, matrix.rows*matrix.columns)
+	matrix.row = row
+	matrix.column = column
+	matrix.matrix = make([]float64, matrix.row*matrix.column)
 	return matrix, nil
 }
 
 // ZeroMatrix make all value 0
 func (m *Matrix) ZeroMatrix() {
 	m.checkNormal()
-	m.matrix = make([]float64, m.rows*m.columns)
+	m.matrix = make([]float64, m.row*m.column)
 }
 
 // MakeVector will create vector by array
 func (m *Matrix) MakeVector(row []float64) {
 	// TODO: check the vector
-	m.rows = 1
-	m.columns = len(row)
+	m.row = 1
+	m.column = len(row)
 	m.matrix = row
 }
 
 // AddRow add row at tail. if the len of column = 0. create new vector 1 * len(row)
 func (m *Matrix) AddRow(row []float64) error {
-	if m.columns != len(row) && m.columns != 0 {
+	if m.column != len(row) && m.column != 0 {
 		return errors.New("Column length is not same")
 	}
-	if m.columns == 0 {
+	if m.column == 0 {
 		m.MakeVector(row)
 		return nil
 	}
-	m.rows++
+	m.row++
 	m.matrix = append(m.matrix, row...)
 	return nil
 }
 
 // AddRowHEAD add row at head. if the len of column = 0 create new vector
 func (m *Matrix) AddRowHEAD(row []float64) error {
-	if m.columns != len(row) && m.columns != 0 {
+	if m.column != len(row) && m.column != 0 {
 		return errors.New("Column length is not same")
 	}
-	if m.columns == 0 {
+	if m.column == 0 {
 		m.MakeVector(row)
 		return nil
 	}
-	m.rows++
+	m.row++
 	m.matrix = append(row, m.matrix...)
 	return nil
 }
 
 // Show will show matrix condition
 func (m *Matrix) Show() {
-	for i := 0; i < m.rows; i++ {
-		for j := 0; j < m.columns; j++ {
-			fmt.Print(m.matrix[i*m.columns+j])
+	for i := 0; i < m.row; i++ {
+		for j := 0; j < m.column; j++ {
+			fmt.Print(m.matrix[i*m.column+j])
 		}
 		fmt.Println()
 	}
@@ -78,7 +78,7 @@ func (m *Matrix) Show() {
 
 // Size return matrix size
 func (m *Matrix) Size() (int, int) {
-	return m.rows, m.columns
+	return m.row, m.column
 }
 
 // At return a point of value
@@ -86,7 +86,7 @@ func (m *Matrix) At(row, column int) (float64, error) {
 	if err := m.checkThereValue(row, column); err != nil {
 		return 0, err
 	}
-	return m.matrix[m.columns*(row-1)+column-1], nil
+	return m.matrix[m.column*(row-1)+column-1], nil
 }
 
 // Set will set specifix value
@@ -94,7 +94,7 @@ func (m *Matrix) Set(row, column int, value float64) error {
 	if err := m.checkThereValue(row, column); err != nil {
 		return err
 	}
-	m.matrix[m.columns*(row-1)+column-1] = value
+	m.matrix[m.column*(row-1)+column-1] = value
 	return nil
 }
 
@@ -103,8 +103,8 @@ func (m *Matrix) SetMatrix(mat Matrix) error {
 	if err := mat.checkNormal(); err != nil {
 		return errors.New("The matrix is broken")
 	}
-	m.rows = mat.rows
-	m.columns = mat.columns
+	m.row = mat.row
+	m.column = mat.column
 	m.matrix = mat.matrix
 	return nil
 }

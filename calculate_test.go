@@ -121,7 +121,7 @@ func TestSubError(t *testing.T) {
 	var matrix *Matrix
 	var matrix2 *Matrix
 	matrix = createMatrix(4, 3, 0)
-	matrix.rows = -3
+	matrix.row = -3
 	err := matrix.Sub(4.3)
 	if err == nil {
 		t.Errorf("Sub should get error got nil")
@@ -153,11 +153,11 @@ func TestMulti(t *testing.T) {
 	matrix.matrix = []float64{1, 2, 3, 4, 5, 6, 7, 8}
 	matrix2.matrix = []float64{9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20}
 	matrix.Multi(matrix2)
-	if matrix.rows != 2 {
-		t.Errorf("Matrix row length should be 3 now %v", matrix.rows)
+	if matrix.row != 2 {
+		t.Errorf("Matrix row length should be 3 now %v", matrix.row)
 	}
-	if matrix.columns != 3 {
-		t.Errorf("Matrix column length should be 4 now %v", matrix.columns)
+	if matrix.column != 3 {
+		t.Errorf("Matrix column length should be 4 now %v", matrix.column)
 	}
 	if val, _ := matrix.At(1, 1); val != 150 {
 		t.Errorf("Matrix column at (1,1) should be 150 now %v", val)
