@@ -65,6 +65,26 @@ func TestNewVector(t *testing.T) {
 	}
 }
 
+func TestCopy(t *testing.T) {
+	var matrix *Matrix
+	var answer *Matrix
+	var err error
+	answer = createUniformMatrix(2, 3, 5)
+	matrix, err = Copy(answer)
+	if err != nil {
+		t.Errorf("Should be error nil but got %v", err)
+	}
+	if !reflect.DeepEqual(answer, matrix) {
+		t.Errorf("want %#v got %#v", answer, matrix)
+	}
+
+	answer = &Matrix{2, 3, []float64{1, 2}}
+	_, err = Copy(answer)
+	if err == nil {
+		t.Errorf("Should get error but got nil")
+	}
+}
+
 func TestZeroMatrix(t *testing.T) {
 	var matrix *Matrix
 	var answer *Matrix

@@ -38,6 +38,15 @@ func NewVector(row []float64) (*Matrix, error) {
 	return matrix, nil
 }
 
+// Copy will copy matrix
+func Copy(mat *Matrix) (*Matrix, error) {
+	if err := mat.checkNormal(); err != nil {
+		return nil, err
+	}
+	matrix := &Matrix{mat.row, mat.column, mat.matrix}
+	return matrix, nil
+}
+
 // ZeroMatrix make all value 0
 func (m *Matrix) ZeroMatrix() {
 	m.matrix = make([]float64, m.row*m.column)
