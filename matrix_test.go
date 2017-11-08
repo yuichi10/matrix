@@ -234,10 +234,20 @@ func TestSetMatrix(t *testing.T) {
 	if !reflect.DeepEqual(answer, matrix) {
 		t.Errorf("want %#v got %#v", answer, matrix)
 	}
-
 	answer = &Matrix{-1, 2, []float64{}}
 	err = matrix.SetMatrix(answer)
 	if err == nil {
 		t.Errorf("Should get error but got nil")
+	}
+}
+
+func TestTranspose(t *testing.T) {
+	var matrix *Matrix
+	var answer *Matrix
+	matrix = &Matrix{3, 4, []float64{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12}}
+	answer = &Matrix{4, 3, []float64{1, 5, 9, 2, 6, 10, 3, 7, 11, 4, 8, 12}}
+	matrix.Transpose()
+	if !reflect.DeepEqual(answer, matrix) {
+		t.Errorf("want %#v got %#v", answer, matrix)
 	}
 }

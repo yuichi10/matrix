@@ -110,8 +110,28 @@ func (m *Matrix) SetMatrix(mat *Matrix) error {
 	if err := mat.checkNormal(); err != nil {
 		return errors.New("The matrix is broken")
 	}
+	vector := make([]float64, len(mat.matrix))
+	copy(vector, mat.matrix)
 	m.row = mat.row
 	m.column = mat.column
-	m.matrix = mat.matrix
+	m.matrix = vector
 	return nil
+}
+
+// Transpose will make transposed vector
+func (m *Matrix) Transpose() {
+	vector := make([]float64, len(m.matrix))
+	copy(vector, m.matrix)
+	count := 0
+	for i := 0; i < m.column; i++ {
+		for j := 0; j < m.row; j++ {
+			vector[count] = m.matrix[j*m.column+i]
+			count++
+		}
+	}
+	r := m.row
+	c := m.column
+	m.row = c
+	m.column = r
+	m.matrix = vector
 }
