@@ -27,14 +27,15 @@ func NewMatrix(row, column int) (*Matrix, error) {
 
 // NewVector will create vector by array
 func NewVector(row []float64) (*Matrix, error) {
-	// TODO: check the vector
 	if len(row) <= 0 {
 		return nil, errors.New("The vector is broken")
 	}
 	matrix := new(Matrix)
+	vector := make([]float64, len(row))
+	copy(vector, row)
 	matrix.row = len(row)
 	matrix.column = 1
-	matrix.matrix = row
+	matrix.matrix = vector
 	return matrix, nil
 }
 
@@ -43,7 +44,9 @@ func Copy(mat *Matrix) (*Matrix, error) {
 	if err := mat.checkNormal(); err != nil {
 		return nil, err
 	}
-	matrix := &Matrix{mat.row, mat.column, mat.matrix}
+	vector := make([]float64, len(mat.matrix))
+	copy(vector, mat.matrix)
+	matrix := &Matrix{mat.row, mat.column, vector}
 	return matrix, nil
 }
 
