@@ -3,6 +3,7 @@ package matrix
 import (
 	"errors"
 	"fmt"
+	"strings"
 )
 
 // Matrix has information of matrix
@@ -16,7 +17,7 @@ type Matrix struct {
 func NewMatrix(row, column int) (*Matrix, error) {
 	matrix := new(Matrix)
 	if row <= 0 || column <= 0 {
-		return nil, errors.New("Length is not greater equal 0")
+		return nil, errors.New("Length is not greater 0")
 	}
 	matrix.row = row
 	matrix.column = column
@@ -24,28 +25,28 @@ func NewMatrix(row, column int) (*Matrix, error) {
 	return matrix, nil
 }
 
-// ZeroMatrix make all value 0
-func (m *Matrix) ZeroMatrix() {
-	m.checkNormal()
-	m.matrix = make([]float64, m.row*m.column)
+// NewVector will create vector by array
+func NewVector(row []float64) (*Matrix, error) {
+	// TODO: check the vector
+	if len(row) <= 0 {
+		return nil, errors.New("The vector is broken")
+	}
+	matrix := new(Matrix)
+	matrix.row = len(row)
+	matrix.column = 1
+	matrix.matrix = row
+	return matrix, nil
 }
 
-// MakeVector will create vector by array
-func (m *Matrix) MakeVector(row []float64) {
-	// TODO: check the vector
-	m.row = 1
-	m.column = len(row)
-	m.matrix = row
+// ZeroMatrix make all value 0
+func (m *Matrix) ZeroMatrix() {
+	m.matrix = make([]float64, m.row*m.column)
 }
 
 // AddRow add row at tail. if the len of column = 0. create new vector 1 * len(row)
 func (m *Matrix) AddRow(row []float64) error {
-	if m.column != len(row) && m.column != 0 {
+	if m.column != len(row) {
 		return errors.New("Column length is not same")
-	}
-	if m.column == 0 {
-		m.MakeVector(row)
-		return nil
 	}
 	m.row++
 	m.matrix = append(m.matrix, row...)
@@ -54,12 +55,8 @@ func (m *Matrix) AddRow(row []float64) error {
 
 // AddRowHEAD add row at head. if the len of column = 0 create new vector
 func (m *Matrix) AddRowHEAD(row []float64) error {
-	if m.column != len(row) && m.column != 0 {
+	if m.column != len(row) {
 		return errors.New("Column length is not same")
-	}
-	if m.column == 0 {
-		m.MakeVector(row)
-		return nil
 	}
 	m.row++
 	m.matrix = append(row, m.matrix...)
@@ -69,10 +66,11 @@ func (m *Matrix) AddRowHEAD(row []float64) error {
 // Show will show matrix condition
 func (m *Matrix) Show() {
 	for i := 0; i < m.row; i++ {
+		line := ""
 		for j := 0; j < m.column; j++ {
-			fmt.Print(m.matrix[i*m.column+j])
+			line = fmt.Sprintf("%v %v", line, m.matrix[i*m.column+j])
 		}
-		fmt.Println()
+		fmt.Println(strings.Trim(line, " "))
 	}
 }
 
@@ -99,7 +97,7 @@ func (m *Matrix) Set(row, column int, value float64) error {
 }
 
 // SetMatrix will set mat to this matrix
-func (m *Matrix) SetMatrix(mat Matrix) error {
+func (m *Matrix) SetMatrix(mat *Matrix) error {
 	if err := mat.checkNormal(); err != nil {
 		return errors.New("The matrix is broken")
 	}
