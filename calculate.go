@@ -1,8 +1,18 @@
 package matrix
 
 import (
+	"context"
 	"errors"
+	"sync"
 )
+
+type calcMultiInfo struct {
+	result *Matrix
+	op2    *Matrix
+	index  int
+}
+
+var wg sync.WaitGroup
 
 func (m *Matrix) subByMatrix(mat Matrix) error {
 	if err := m.checkSameSize(mat); err != nil {
@@ -35,6 +45,24 @@ func (m *Matrix) multiAtIndex(mat Matrix, index int) float64 {
 	return val
 }
 
+func (m *Matrix) multiAtIndexParallel(ctx context.Context, calcInfo chan *calcMultiInfo) {
+	for {
+		select {
+		case <-ctx.Done():
+			wg.Done()
+			return
+		case info := <-calcInfo:
+			var val float64
+			r := (info.index) / info.op2.column
+			c := (info.index) % info.op2.column
+			for i := 0; i < m.column; i++ {
+				val += m.matrix[i+r*m.column] * info.op2.matrix[i*info.op2.column+c]
+			}
+			info.result.matrix[info.index] = val
+		}
+	}
+}
+
 func (m *Matrix) multiByMatrix(mat Matrix) error {
 	if err := m.checkCanMulti(mat); err != nil {
 		return err
@@ -43,6 +71,25 @@ func (m *Matrix) multiByMatrix(mat Matrix) error {
 	for i := 0; i < m.row*mat.column; i++ {
 		matrix.matrix[i] = m.multiAtIndex(mat, i)
 	}
+	m.SetMatrix(matrix)
+	return nil
+}
+
+func (m *Matrix) multiByMatrixParallel(mat Matrix) error {
+	if err := m.checkCanMulti(mat); err != nil {
+		return err
+	}
+	ctx, cancel := context.WithCancel(context.Background())
+	calcInfo := make(chan *calcMultiInfo)
+	wg.Add(1)
+	go m.multiAtIndexParallel(ctx, calcInfo)
+	matrix, _ := NewMatrix(m.row, mat.column)
+	for i := 0; i < m.row*mat.column; i++ {
+		info := &calcMultiInfo{result: matrix, op2: &mat, index: i}
+		calcInfo <- info
+	}
+	cancel()
+	wg.Wait()
 	m.SetMatrix(matrix)
 	return nil
 }
@@ -103,9 +150,11 @@ func (m *Matrix) Sub(num interface{}) error {
 // Multi will calculate Multi
 func (m *Matrix) Multi(num interface{}) error {
 	if mat, ok := num.(Matrix); ok {
-		return m.multiByMatrix(mat)
+		return m.multiByMatrixParallel(mat)
+		// return m.multiByMatrix(mat)
 	} else if mat, ok := num.(*Matrix); ok {
-		return m.multiByMatrix(*mat)
+		return m.multiByMatrixParallel(*mat)
+		// return m.multiByMatrix(*mat)
 	} else if mat, ok := num.(float64); ok {
 		m.multiByFloat(float64(mat))
 		return nil

@@ -112,6 +112,7 @@ func TestAddRow(t *testing.T) {
 	if !reflect.DeepEqual(answer, matrix) {
 		t.Errorf("want %#v got %#v", answer, matrix)
 	}
+
 	matrix, _ = NewMatrix(2, 3)
 	vector = []float64{1, 2}
 	err = matrix.AddRow(vector)
