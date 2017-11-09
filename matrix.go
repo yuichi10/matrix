@@ -14,14 +14,23 @@ type Matrix struct {
 }
 
 // NewMatrix will return *Matrix
-func NewMatrix(row, column int) (*Matrix, error) {
+func NewMatrix(row, column int, vector []float64) (*Matrix, error) {
 	matrix := new(Matrix)
 	if row <= 0 || column <= 0 {
 		return nil, errors.New("Length is not greater 0")
 	}
 	matrix.row = row
 	matrix.column = column
-	matrix.matrix = make([]float64, matrix.row*matrix.column)
+	if len(vector) == 0 || vector == nil {
+		matrix.matrix = make([]float64, matrix.row*matrix.column)
+		return matrix, nil
+	}
+	vec := make([]float64, len(vector))
+	copy(vec, vector)
+	matrix.matrix = vec
+	if err := matrix.checkNormal(); err != nil {
+		return nil, err
+	}
 	return matrix, nil
 }
 
