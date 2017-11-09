@@ -186,6 +186,53 @@ func TestMultiError(t *testing.T) {
 	}
 }
 
+func TestMultiEach(t *testing.T) {
+	var matrix *Matrix
+	var matrix2 *Matrix
+	var answer *Matrix
+	matrix = &Matrix{3, 5, []float64{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15}}
+	matrix2 = &Matrix{3, 5, []float64{1, 2, -3, 4, 5, 6, 7, -8, 9, 10, 11, 12, -13, 14, 15}}
+	answer = &Matrix{3, 5, []float64{1, 4, -9, 16, 25, 36, 49, -64, 81, 100, 121, 144, -169, 196, 225}}
+	matrix.MultiEach(matrix2)
+	if !reflect.DeepEqual(answer, matrix) {
+		t.Errorf("want %#v got %#v", answer, matrix)
+	}
+
+	matrix = createUniformMatrix(2, 4, 2)
+	answer = &Matrix{2, 4, []float64{6, 6, 6, 6, 6, 6, 6, 6}}
+	matrix.MultiEach(3)
+	if !reflect.DeepEqual(answer, matrix) {
+		t.Errorf("want %#v got %#v", answer, matrix)
+	}
+
+	matrix = createUniformMatrix(2, 4, 2)
+	answer = &Matrix{2, 4, []float64{6.6, 6.6, 6.6, 6.6, 6.6, 6.6, 6.6, 6.6}}
+	matrix.MultiEach(3.3)
+
+}
+
+func TestMultiEachError(t *testing.T) {
+	var matrix *Matrix
+	var matrix2 *Matrix
+	var err error
+	matrix = createUniformMatrix(2, 4, 0)
+	matrix2 = createUniformMatrix(2, 3, 0)
+	err = matrix.MultiEach(matrix2)
+	if err == nil {
+		t.Errorf("opt1's colmn and opt2's row is different therefore should get error but got success")
+	}
+	matrix2 = createUniformMatrix(3, 4, 0)
+	err = matrix.MultiEach(*matrix2)
+	if err == nil {
+		t.Errorf("opt1's colmn and opt2's row is different therefore should get error but got success")
+	}
+
+	matrix.MultiEach("string is not allowd")
+	if err == nil {
+		t.Errorf("opt2 is not allowed type therefore should get error but got success")
+	}
+}
+
 func setup() {}
 
 func teardown() {}

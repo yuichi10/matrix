@@ -94,6 +94,16 @@ func (m *Matrix) multiByMatrixParallel(mat Matrix) error {
 	return nil
 }
 
+func (m *Matrix) multiEachByMatrix(mat Matrix) error {
+	if err := m.checkSameSize(mat); err != nil {
+		return err
+	}
+	for i, val := range mat.matrix {
+		m.matrix[i] *= val
+	}
+	return nil
+}
+
 func (m *Matrix) subByFloat(num float64) {
 	for i := range m.matrix {
 		m.matrix[i] -= num
@@ -165,5 +175,20 @@ func (m *Matrix) Multi(num interface{}) error {
 	return errors.New("The multi op2 type is not allowed")
 }
 
-// MultiEach
+// MultiEach will do calculate each multi
+func (m *Matrix) MultiEach(num interface{}) error {
+	if mat, ok := num.(Matrix); ok {
+		return m.multiEachByMatrix(mat)
+	} else if mat, ok := num.(*Matrix); ok {
+		return m.multiEachByMatrix(*mat)
+	} else if mat, ok := num.(float64); ok {
+		m.multiByFloat(float64(mat))
+		return nil
+	} else if mat, ok := num.(int); ok {
+		m.multiByFloat(float64(mat))
+		return nil
+	}
+	return errors.New("The multi op2 type is not allowed")
+}
+
 // Sep
