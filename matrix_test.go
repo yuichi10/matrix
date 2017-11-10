@@ -190,6 +190,13 @@ func TestAddRow(t *testing.T) {
 	if !reflect.DeepEqual(answer, matrix) {
 		t.Errorf("want %#v got %#v", answer, matrix)
 	}
+
+	matrix = &Matrix{2, 3, []float64{1, 2, 3, 4, 5, 6}}
+	answer = &Matrix{3, 3, []float64{1, 2, 3, 4, 5, 6, 7.6, 7.6, 7.6}}
+	matrix.AddRow(7.6)
+	if !reflect.DeepEqual(answer, matrix) {
+		t.Errorf("want %#v got %#v", answer, matrix)
+	}
 }
 
 func TestAddRowError(t *testing.T) {

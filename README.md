@@ -65,6 +65,23 @@ matrix.AddRow([]float64{7, 8, 9})
 // 1 2 3
 // 4 5 6
 // 7 8 9
+
+matrix = matrix.NewMatrix(2, 3, []float64{1, 2, 3, 4, 5, 6})
+matrix2 = matrix.NewMatrix{3, 3, []float64{7, 8, 9, 10, 11, 12, 13, 14, 15}}
+matrix.AddRow(matrix2)
+// if you set matrix it will be
+// 1 2 3
+// 4 5 6
+// 7 8 9
+// 10 11 12
+// 13 14 15
+
+matrix = matrix.NewMatrix(2, 3, []float64{1, 2, 3, 4, 5, 6})
+matrix.AddRow(7)
+// if you set int or float64, then you will get
+// 1 2 3
+// 4 5 6
+// 7 7 7
 ```
 
 ### Add row at head

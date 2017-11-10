@@ -75,7 +75,7 @@ func (m *Matrix) AddRowMatrix(mat Matrix) error {
 }
 
 // AddRow add row at tail. if the len of column = 0. create new vector 1 * len(row)
-// float64 and Matrix are only allowed
+// []float64, Matrix, int and float64 are only allowed
 func (m *Matrix) AddRow(num interface{}) error {
 	if mat, ok := num.(Matrix); ok {
 		return m.AddRowMatrix(mat)
@@ -96,6 +96,13 @@ func (m *Matrix) AddRow(num interface{}) error {
 		}
 		m.matrix = append(m.matrix, vector...)
 		return nil
+	} else if row, ok := num.(float64); ok {
+		m.row++
+		vector := make([]float64, m.column)
+		for i := range vector {
+			vector[i] = float64(row)
+		}
+		m.matrix = append(m.matrix, vector...)
 	}
 	return errors.New("The argument type is not allowed")
 }
