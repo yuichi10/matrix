@@ -204,6 +204,7 @@ func TestAddRowError(t *testing.T) {
 
 func TestAddRowHEAD(t *testing.T) {
 	var matrix *Matrix
+	var matrix2 *Matrix
 	var answer *Matrix
 	var vector []float64
 	var err error
@@ -217,9 +218,57 @@ func TestAddRowHEAD(t *testing.T) {
 	if !reflect.DeepEqual(answer, matrix) {
 		t.Errorf("want %#v got %#v", answer, matrix)
 	}
+
+	matrix = &Matrix{2, 3, []float64{1, 2, 3, 4, 5, 6}}
+	matrix2 = &Matrix{3, 3, []float64{7, 8, 9, 10, 11, 12, 13, 14, 15}}
+	answer = &Matrix{5, 3, []float64{7, 8, 9, 10, 11, 12, 13, 14, 15, 1, 2, 3, 4, 5, 6}}
+	matrix.AddRowHEAD(matrix2)
+	if !reflect.DeepEqual(answer, matrix) {
+		t.Errorf("want %#v got %#v", answer, matrix)
+	}
+
+	matrix = &Matrix{2, 3, []float64{1, 2, 3, 4, 5, 6}}
+	matrix2 = &Matrix{3, 3, []float64{7, 8, 9, 10, 11, 12, 13, 14, 15}}
+	answer = &Matrix{5, 3, []float64{7, 8, 9, 10, 11, 12, 13, 14, 15, 1, 2, 3, 4, 5, 6}}
+	matrix.AddRowHEAD(*matrix2)
+	if !reflect.DeepEqual(answer, matrix) {
+		t.Errorf("want %#v got %#v", answer, matrix)
+	}
+
+	matrix = &Matrix{2, 3, []float64{1, 2, 3, 4, 5, 6}}
+	answer = &Matrix{3, 3, []float64{7, 7, 7, 1, 2, 3, 4, 5, 6}}
+	matrix.AddRowHEAD(7)
+	if !reflect.DeepEqual(answer, matrix) {
+		t.Errorf("want %#v got %#v", answer, matrix)
+	}
+
+	matrix = &Matrix{2, 3, []float64{1, 2, 3, 4, 5, 6}}
+	answer = &Matrix{3, 3, []float64{7.8, 7.8, 7.8, 1, 2, 3, 4, 5, 6}}
+	matrix.AddRowHEAD(7.8)
+	if !reflect.DeepEqual(answer, matrix) {
+		t.Errorf("want %#v got %#v", answer, matrix)
+	}
+}
+
+func TestAddRowHEADError(t *testing.T) {
+	var matrix *Matrix
+	var matrix2 *Matrix
+	var vector []float64
+	var err error
 	matrix, _ = NewMatrix(2, 3, nil)
 	vector = []float64{1, 2}
 	err = matrix.AddRowHEAD(vector)
+	if err == nil {
+		t.Errorf("Should get error but got nil")
+	}
+	matrix, _ = NewMatrix(2, 3, nil)
+	matrix2, _ = NewMatrix(2, 2, nil)
+	err = matrix.AddRowHEAD(matrix2)
+	if err == nil {
+		t.Errorf("Should get error but got nil")
+	}
+
+	err = matrix.AddRowHEAD("this type is not allowed")
 	if err == nil {
 		t.Errorf("Should get error but got nil")
 	}

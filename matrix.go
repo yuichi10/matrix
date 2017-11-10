@@ -100,14 +100,48 @@ func (m *Matrix) AddRow(num interface{}) error {
 	return errors.New("The argument type is not allowed")
 }
 
-// AddRowHEAD add row at head. if the len of column = 0 create new vector
-func (m *Matrix) AddRowHEAD(row []float64) error {
-	if m.column != len(row) {
+// AddRowMatrixHEAD will add matrix HEAD this matrix
+func (m *Matrix) AddRowMatrixHEAD(mat Matrix) error {
+	if m.column != mat.column {
 		return errors.New("Column length is not same")
 	}
-	m.row++
-	m.matrix = append(row, m.matrix...)
+	m.matrix = append(mat.matrix, m.matrix...)
+	m.row += mat.row
 	return nil
+}
+
+// AddRowHEAD add row at head. if the len of column = 0 create new vector
+func (m *Matrix) AddRowHEAD(num interface{}) error {
+	if mat, ok := num.(Matrix); ok {
+		return m.AddRowMatrixHEAD(mat)
+	} else if mat, ok := num.(*Matrix); ok {
+		return m.AddRowMatrixHEAD(*mat)
+	} else if row, ok := num.([]float64); ok {
+		if m.column != len(row) {
+			return errors.New("Column length is not same")
+		}
+		m.row++
+		m.matrix = append(row, m.matrix...)
+		return nil
+	} else if row, ok := num.(int); ok {
+		m.row++
+		vector := make([]float64, m.column)
+		for i := range vector {
+			vector[i] = float64(row)
+		}
+		m.matrix = append(vector, m.matrix...)
+		return nil
+	} else if row, ok := num.(float64); ok {
+		m.row++
+		vector := make([]float64, m.column)
+		for i := range vector {
+			vector[i] = float64(row)
+		}
+		m.matrix = append(vector, m.matrix...)
+		return nil
+	}
+	return errors.New("The argument type is not allowed")
+
 }
 
 // Show will show matrix condition

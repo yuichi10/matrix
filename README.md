@@ -76,6 +76,23 @@ matrix.AddRowHEAD([]float64{7, 8, 9})
 // 7 8 9
 // 1 2 3
 // 4 5 6
+
+matrix = matrix.NewMatrix(2, 3, []float64{1, 2, 3, 4, 5, 6})
+matrix2 = matrix.NewMatrix{3, 3, []float64{7, 8, 9, 10, 11, 12, 13, 14, 15}}
+matrix.AddRowHEAD(matrix2)
+// if you set matrix it will be
+// 7 8 9
+// 10 11 12
+// 13 14 15
+// 1 2 3
+// 4 5 6
+
+matrix = matrix.NewMatrix(2, 3, []float64{1, 2, 3, 4, 5, 6})
+matrix.AddRowHead(7)
+// if you set int or float64, then you will get
+// 7 7 7
+// 1 2 3
+// 4 5 6
 ```
 
 ### Get size
