@@ -118,8 +118,38 @@ func TestZeroMatrix(t *testing.T) {
 	}
 }
 
+func TestAddRowMatrix(t *testing.T) {
+	var matrix *Matrix
+	var matrix2 *Matrix
+	var answer *Matrix
+	var err error
+	matrix = &Matrix{2, 3, []float64{1, 2, 3, 4, 5, 6}}
+	matrix2 = &Matrix{3, 3, []float64{7, 8, 9, 10, 11, 12, 13, 14, 15}}
+	answer = &Matrix{5, 3, []float64{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15}}
+	matrix.AddRowMatrix(*matrix2)
+	if err != nil {
+		t.Errorf("Should be error nil but got %v", err)
+	}
+	if !reflect.DeepEqual(answer, matrix) {
+		t.Errorf("want %#v got %#v", answer, matrix)
+	}
+}
+
+func TestAddRowMatrixError(t *testing.T) {
+	var matrix *Matrix
+	var matrix2 *Matrix
+	var err error
+	matrix = &Matrix{2, 3, []float64{1, 2, 3, 4, 5, 6}}
+	matrix2 = &Matrix{3, 2, []float64{7, 8, 9, 10, 11, 12, 13, 14, 15}}
+	err = matrix.AddRowMatrix(*matrix2)
+	if err == nil {
+		t.Errorf("Should get error but got nil")
+	}
+}
+
 func TestAddRow(t *testing.T) {
 	var matrix *Matrix
+	var matrix2 *Matrix
 	var answer *Matrix
 	var vector []float64
 	var err error
@@ -137,6 +167,36 @@ func TestAddRow(t *testing.T) {
 	matrix, _ = NewMatrix(2, 3, nil)
 	vector = []float64{1, 2}
 	err = matrix.AddRow(vector)
+	if err == nil {
+		t.Errorf("Should get error but got nil")
+	}
+
+	matrix = &Matrix{2, 3, []float64{1, 2, 3, 4, 5, 6}}
+	matrix2 = &Matrix{3, 3, []float64{7, 8, 9, 10, 11, 12, 13, 14, 15}}
+	answer = &Matrix{5, 3, []float64{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15}}
+	matrix.AddRow(*matrix2)
+	if !reflect.DeepEqual(answer, matrix) {
+		t.Errorf("want %#v got %#v", answer, matrix)
+	}
+	matrix = &Matrix{2, 3, []float64{1, 2, 3, 4, 5, 6}}
+	matrix.AddRow(matrix2)
+	if !reflect.DeepEqual(answer, matrix) {
+		t.Errorf("want %#v got %#v", answer, matrix)
+	}
+
+	matrix = &Matrix{2, 3, []float64{1, 2, 3, 4, 5, 6}}
+	answer = &Matrix{3, 3, []float64{1, 2, 3, 4, 5, 6, 7, 7, 7}}
+	matrix.AddRow(7)
+	if !reflect.DeepEqual(answer, matrix) {
+		t.Errorf("want %#v got %#v", answer, matrix)
+	}
+}
+
+func TestAddRowError(t *testing.T) {
+	var matrix *Matrix
+	var err error
+	matrix = &Matrix{2, 3, []float64{1, 2, 3, 4, 5, 6}}
+	err = matrix.AddRow("this is not allowed")
 	if err == nil {
 		t.Errorf("Should get error but got nil")
 	}
