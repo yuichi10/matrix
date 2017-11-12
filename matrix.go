@@ -245,3 +245,14 @@ func (m *Matrix) SepColumn(start, end int) (*Matrix, error) {
 	}
 	return NewMatrix(m.row, end-start+1, vector)
 }
+
+// Vector will return vector version of this matrix
+func (m *Matrix) Vector() (*Matrix, error) {
+	matrix, err := Copy(m)
+	if err != nil {
+		return nil, err
+	}
+	matrix.row = m.row * m.column
+	matrix.column = 1
+	return matrix, nil
+}
