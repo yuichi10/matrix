@@ -389,3 +389,85 @@ func TestTranspose(t *testing.T) {
 		t.Errorf("want %#v got %#v", answer, matrix)
 	}
 }
+
+func TestSepRow(t *testing.T) {
+	var matrix *Matrix
+	var matrix2 *Matrix
+	var answer *Matrix
+	var err error
+	matrix = &Matrix{6, 3, []float64{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18}}
+	answer = &Matrix{3, 3, []float64{4, 5, 6, 7, 8, 9, 10, 11, 12}}
+	matrix2, err = matrix.SepRow(2, 4)
+	if err != nil {
+		t.Errorf("Should be error nil but got %v", err)
+	}
+	if !reflect.DeepEqual(answer, matrix2) {
+		t.Errorf("want %#v got %#v", answer, matrix2)
+	}
+
+	answer = matrix
+	matrix2, err = matrix.SepRow(1, 6)
+	if !reflect.DeepEqual(answer, matrix2) {
+		t.Errorf("want %#v got %#v", answer, matrix2)
+	}
+}
+
+func TestSepRowError(t *testing.T) {
+	var matrix *Matrix
+	var err error
+	matrix = &Matrix{6, 3, []float64{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18}}
+	_, err = matrix.SepRow(2, 1)
+	if err == nil {
+		t.Errorf("Should get error but got nil")
+	}
+
+	_, err = matrix.SepRow(0, 4)
+	if err == nil {
+		t.Errorf("Should get error but got nil")
+	}
+	_, err = matrix.SepRow(1, 7)
+	if err == nil {
+		t.Errorf("Should get error but got nil")
+	}
+}
+
+func TestSepColumn(t *testing.T) {
+	var matrix *Matrix
+	var matrix2 *Matrix
+	var answer *Matrix
+	var err error
+	matrix = &Matrix{3, 6, []float64{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18}}
+	answer = &Matrix{3, 3, []float64{2, 3, 4, 8, 9, 10, 14, 15, 16}}
+	matrix2, err = matrix.SepColumn(2, 4)
+	if err != nil {
+		t.Errorf("Should be error nil but got %v", err)
+	}
+	if !reflect.DeepEqual(answer, matrix2) {
+		t.Errorf("want %#v got %#v", answer, matrix2)
+	}
+
+	answer = matrix
+	matrix2, err = matrix.SepColumn(1, 6)
+	if !reflect.DeepEqual(answer, matrix2) {
+		t.Errorf("want %#v got %#v", answer, matrix2)
+	}
+}
+
+func TestSepColumnError(t *testing.T) {
+	var matrix *Matrix
+	var err error
+	matrix = &Matrix{3, 6, []float64{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18}}
+	_, err = matrix.SepColumn(2, 1)
+	if err == nil {
+		t.Errorf("Should get error but got nil")
+	}
+
+	_, err = matrix.SepColumn(0, 4)
+	if err == nil {
+		t.Errorf("Should get error but got nil")
+	}
+	_, err = matrix.SepColumn(1, 7)
+	if err == nil {
+		t.Errorf("Should get error but got nil")
+	}
+}

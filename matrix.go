@@ -214,3 +214,34 @@ func (m *Matrix) Transpose() {
 	m.column = r
 	m.matrix = vector
 }
+
+// SepRow will return matrix which separate by row numbers
+func (m *Matrix) SepRow(start, end int) (*Matrix, error) {
+	if end < start {
+		return nil, errors.New("The argument values are invalid")
+	} else if end > m.row || start < 1 {
+		return nil, errors.New("The value are out of matrix")
+	}
+	s := (start - 1) * m.column
+	e := (end - 1) * m.column
+	matrix, err := NewMatrix(end-start+1, m.column, m.matrix[s:e+m.column])
+	return matrix, err
+}
+
+// SepColumn will return matrix which separate by sep numbers
+func (m *Matrix) SepColumn(start, end int) (*Matrix, error) {
+	if end < start {
+		return nil, errors.New("The argument values are invalid")
+	} else if end > m.column || start < 1 {
+		return nil, errors.New("The value are out of matrix")
+	}
+	vector := make([]float64, (end-start+1)*m.row)
+	count := 0
+	for i := 0; i < m.row; i++ {
+		for j := start - 1; j < end; j++ {
+			vector[count] = m.matrix[i*m.column+j]
+			count++
+		}
+	}
+	return NewMatrix(m.row, end-start+1, vector)
+}

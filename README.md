@@ -161,6 +161,26 @@ matrix.Transpose()
 // 3 6
 ```
 
+### SepRow matrix
+```golang
+matrix := &Matrix{6, 3, []float64{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18}}
+matrix2 := matrix.SepRow(2, 4)
+// then you will get matrix2
+// 4, 5, 6
+// 7, 8, 9
+// 10, 11, 12
+```
+
+### SepColumn matrix
+```golang
+matrix = &Matrix{3, 6, []float64{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18}}
+matrix2 := matrix.SepColumn(2, 4)
+// then you will get matrix2
+// 2, 3, 4
+// 8, 9, 10
+// 14, 15, 16
+```
+
 ### Show matrix
 ```golang
 matrix := matrix.NewMatrix(2, 3, []float64{1, 2, 3, 4, 5, 6})
