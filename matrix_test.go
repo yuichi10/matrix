@@ -275,6 +275,24 @@ func TestSize(t *testing.T) {
 	}
 }
 
+func TestRow(t *testing.T) {
+	var matrix *Matrix
+	matrix, _ = New(7, 12, nil)
+	r := matrix.Row()
+	if r != 7 {
+		t.Errorf("want %v got %v", 7, r)
+	}
+}
+
+func TestColumn(t *testing.T) {
+	var matrix *Matrix
+	matrix, _ = New(7, 12, nil)
+	c := matrix.Column()
+	if c != 12 {
+		t.Errorf("want %v got %v", 12, c)
+	}
+}
+
 func TestAt(t *testing.T) {
 	var err error
 	var matrix *Matrix

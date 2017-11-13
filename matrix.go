@@ -174,6 +174,16 @@ func (m *Matrix) Size() (int, int) {
 	return m.row, m.column
 }
 
+// Row return this matrix's row
+func (m *Matrix) Row() int {
+	return m.row
+}
+
+// Column return this matrix's column
+func (m *Matrix) Column() int {
+	return m.column
+}
+
 // At return a point of value
 func (m *Matrix) At(row, column int) (float64, error) {
 	if err := m.checkThereValue(row, column); err != nil {

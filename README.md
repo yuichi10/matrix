@@ -120,6 +120,14 @@ row, column := matrix.Size()
 // then you wil get
 // row = 2
 // column = 3
+
+row = matrix.Row()
+// then you will get
+// 2
+
+column = matrix.Column()
+// then you will get 
+// 3
 ```
 
 ### Get at value
