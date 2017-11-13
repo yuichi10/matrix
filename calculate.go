@@ -124,72 +124,86 @@ func (m *Matrix) multiByFloat(num float64) {
 }
 
 // Add will add some value to Matrix
-func (m *Matrix) Add(num interface{}) error {
+func (m *Matrix) Add(num interface{}) (matrix *Matrix, err error) {
+	matrix = Copy(m)
 	if mat, ok := num.(Matrix); ok {
-		return m.addByMatrix(mat)
+		err = matrix.addByMatrix(mat)
+		return
 	}
 	if mat, ok := num.(*Matrix); ok {
-		return m.addByMatrix(*mat)
+		err = matrix.addByMatrix(*mat)
+		return
 	}
 	if mat, ok := num.(int); ok {
-		m.addByFloat(float64(mat))
-		return nil
+		matrix.addByFloat(float64(mat))
+		return
 	}
 	if mat, ok := num.(float64); ok {
-		m.addByFloat(float64(mat))
-		return nil
+		matrix.addByFloat(float64(mat))
+		return
 	}
-	return errors.New("The add type is not allowed")
+	err = errors.New("The add type is not allowed")
+	return
 }
 
 // Sub will calculate sub of matrix
-func (m *Matrix) Sub(num interface{}) error {
+func (m *Matrix) Sub(num interface{}) (matrix *Matrix, err error) {
+	matrix = Copy(m)
 	if mat, ok := num.(Matrix); ok {
-		return m.subByMatrix(mat)
+		err = matrix.subByMatrix(mat)
+		return
 	} else if mat, ok := num.(*Matrix); ok {
-		return m.subByMatrix(*mat)
+		err = matrix.subByMatrix(*mat)
+		return
 	} else if mat, ok := num.(float64); ok {
-		m.subByFloat(mat)
-		return nil
+		matrix.subByFloat(mat)
+		return
 	} else if mat, ok := num.(int); ok {
-		m.subByFloat(float64(mat))
-		return nil
+		matrix.subByFloat(float64(mat))
+		return
 	}
-	return errors.New("The sub op2 type is not allowed")
+	err = errors.New("The sub op2 type is not allowed")
+	return
 }
 
 // Multi will calculate Multi
-func (m *Matrix) Multi(num interface{}) error {
+func (m *Matrix) Multi(num interface{}) (matrix *Matrix, err error) {
+	matrix = Copy(m)
 	if mat, ok := num.(Matrix); ok {
-		return m.multiByMatrixParallel(mat)
-		// return m.multiByMatrix(mat)
+		err = matrix.multiByMatrixParallel(mat)
+		return
 	} else if mat, ok := num.(*Matrix); ok {
-		return m.multiByMatrixParallel(*mat)
-		// return m.multiByMatrix(*mat)
+		err = matrix.multiByMatrixParallel(*mat)
+		return
 	} else if mat, ok := num.(float64); ok {
-		m.multiByFloat(float64(mat))
-		return nil
+		matrix.multiByFloat(float64(mat))
+		return
 	} else if mat, ok := num.(int); ok {
-		m.multiByFloat(float64(mat))
-		return nil
+		matrix.multiByFloat(float64(mat))
+		return
 	}
-	return errors.New("The multi op2 type is not allowed")
+	err = errors.New("The multi op2 type is not allowed")
+	return
 }
 
 // MultiEach will do calculate each multi
-func (m *Matrix) MultiEach(num interface{}) error {
+func (m *Matrix) MultiEach(num interface{}) (matrix *Matrix, err error) {
+	matrix = Copy(m)
 	if mat, ok := num.(Matrix); ok {
-		return m.multiEachByMatrix(mat)
+		err = matrix.multiEachByMatrix(mat)
+		return
 	} else if mat, ok := num.(*Matrix); ok {
-		return m.multiEachByMatrix(*mat)
+		err = matrix.multiEachByMatrix(*mat)
+		return
 	} else if mat, ok := num.(float64); ok {
-		m.multiByFloat(float64(mat))
-		return nil
+		matrix.multiByFloat(float64(mat))
+		return
 	} else if mat, ok := num.(int); ok {
-		m.multiByFloat(float64(mat))
-		return nil
+		matrix.multiByFloat(float64(mat))
+		return
 	}
-	return errors.New("The multi op2 type is not allowed")
+	err = errors.New("The multi op2 type is not allowed")
+	return
 }
 
 // Sigmoid will return sigmoied matrix

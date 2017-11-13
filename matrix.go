@@ -62,7 +62,7 @@ func (m *Matrix) ZeroMatrix() {
 }
 
 // AddRowMatrix will add matrix behinde this matrix
-func (m *Matrix) AddRowMatrix(mat Matrix) error {
+func (m *Matrix) addRowMatrix(mat Matrix) error {
 	if m.column != mat.column {
 		return errors.New("Column length is not same")
 	}
@@ -73,39 +73,45 @@ func (m *Matrix) AddRowMatrix(mat Matrix) error {
 
 // AddRow add row at tail. if the len of column = 0. create new vector 1 * len(row)
 // []float64, Matrix, int and float64 are only allowed
-func (m *Matrix) AddRow(num interface{}) error {
+func (m *Matrix) AddRow(num interface{}) (matrix *Matrix, err error) {
+	matrix = Copy(m)
 	if mat, ok := num.(Matrix); ok {
-		return m.AddRowMatrix(mat)
+		err = matrix.addRowMatrix(mat)
+		return
 	} else if mat, ok := num.(*Matrix); ok {
-		return m.AddRowMatrix(*mat)
+		err = matrix.addRowMatrix(*mat)
+		return
 	} else if row, ok := num.([]float64); ok {
-		if m.column != len(row) {
-			return errors.New("Column length is not same")
+		if matrix.column != len(row) {
+			err = errors.New("Column length is not same")
+			return
 		}
-		m.row++
-		m.matrix = append(m.matrix, row...)
-		return nil
+		matrix.row++
+		matrix.matrix = append(matrix.matrix, row...)
+		return
 	} else if row, ok := num.(int); ok {
-		m.row++
-		vector := make([]float64, m.column)
+		matrix.row++
+		vector := make([]float64, matrix.column)
 		for i := range vector {
 			vector[i] = float64(row)
 		}
-		m.matrix = append(m.matrix, vector...)
-		return nil
+		matrix.matrix = append(matrix.matrix, vector...)
+		return
 	} else if row, ok := num.(float64); ok {
-		m.row++
-		vector := make([]float64, m.column)
+		matrix.row++
+		vector := make([]float64, matrix.column)
 		for i := range vector {
 			vector[i] = float64(row)
 		}
-		m.matrix = append(m.matrix, vector...)
+		matrix.matrix = append(matrix.matrix, vector...)
+		return
 	}
-	return errors.New("The argument type is not allowed")
+	err = errors.New("The argument type is not allowed")
+	return
 }
 
 // AddRowMatrixHEAD will add matrix HEAD this matrix
-func (m *Matrix) AddRowMatrixHEAD(mat Matrix) error {
+func (m *Matrix) addRowMatrixHEAD(mat Matrix) error {
 	if m.column != mat.column {
 		return errors.New("Column length is not same")
 	}
@@ -115,37 +121,41 @@ func (m *Matrix) AddRowMatrixHEAD(mat Matrix) error {
 }
 
 // AddRowHEAD add row at head. if the len of column = 0 create new vector
-func (m *Matrix) AddRowHEAD(num interface{}) error {
+func (m *Matrix) AddRowHEAD(num interface{}) (matrix *Matrix, err error) {
+	matrix = Copy(m)
 	if mat, ok := num.(Matrix); ok {
-		return m.AddRowMatrixHEAD(mat)
+		err = matrix.addRowMatrixHEAD(mat)
+		return
 	} else if mat, ok := num.(*Matrix); ok {
-		return m.AddRowMatrixHEAD(*mat)
+		err = matrix.addRowMatrixHEAD(*mat)
+		return
 	} else if row, ok := num.([]float64); ok {
-		if m.column != len(row) {
-			return errors.New("Column length is not same")
+		if matrix.column != len(row) {
+			err = errors.New("Column length is not same")
+			return
 		}
-		m.row++
-		m.matrix = append(row, m.matrix...)
-		return nil
+		matrix.row++
+		matrix.matrix = append(row, matrix.matrix...)
+		return
 	} else if row, ok := num.(int); ok {
-		m.row++
-		vector := make([]float64, m.column)
+		matrix.row++
+		vector := make([]float64, matrix.column)
 		for i := range vector {
 			vector[i] = float64(row)
 		}
-		m.matrix = append(vector, m.matrix...)
-		return nil
+		matrix.matrix = append(vector, matrix.matrix...)
+		return
 	} else if row, ok := num.(float64); ok {
-		m.row++
-		vector := make([]float64, m.column)
+		matrix.row++
+		vector := make([]float64, matrix.column)
 		for i := range vector {
 			vector[i] = float64(row)
 		}
-		m.matrix = append(vector, m.matrix...)
-		return nil
+		matrix.matrix = append(vector, matrix.matrix...)
+		return
 	}
-	return errors.New("The argument type is not allowed")
-
+	err = errors.New("The argument type is not allowed")
+	return
 }
 
 // Show will show matrix condition
@@ -195,21 +205,18 @@ func (m *Matrix) SetMatrix(mat *Matrix) error {
 }
 
 // Transpose will make transposed vector
-func (m *Matrix) Transpose() {
-	vector := make([]float64, len(m.matrix))
-	copy(vector, m.matrix)
+func (m *Matrix) Transpose() (matrix *Matrix) {
+	matrix = Copy(m)
 	count := 0
-	for i := 0; i < m.column; i++ {
-		for j := 0; j < m.row; j++ {
-			vector[count] = m.matrix[j*m.column+i]
+	for i := 0; i < matrix.column; i++ {
+		for j := 0; j < matrix.row; j++ {
+			matrix.matrix[count] = m.matrix[j*m.column+i]
 			count++
 		}
 	}
-	r := m.row
-	c := m.column
-	m.row = c
-	m.column = r
-	m.matrix = vector
+	matrix.row = m.column
+	matrix.column = m.row
+	return
 }
 
 // SepRow will return matrix which separate by row numbers
