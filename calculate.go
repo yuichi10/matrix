@@ -3,6 +3,7 @@ package matrix
 import (
 	"context"
 	"errors"
+	"math"
 	"sync"
 )
 
@@ -189,6 +190,19 @@ func (m *Matrix) MultiEach(num interface{}) error {
 		return nil
 	}
 	return errors.New("The multi op2 type is not allowed")
+}
+
+// Sigmoid will return sigmoied matrix
+func (m *Matrix) Sigmoid() *Matrix {
+	matrix, _ := Copy(m)
+	for i := 1; i <= matrix.row; i++ {
+		for j := 1; j <= matrix.column; j++ {
+			val, _ := matrix.At(i, j)
+			sig := 1.0 / (1.0 + math.Exp(-val))
+			matrix.Set(i, j, sig)
+		}
+	}
+	return matrix
 }
 
 // Sep

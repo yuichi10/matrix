@@ -1,6 +1,7 @@
 package matrix
 
 import (
+	"math"
 	"reflect"
 	"testing"
 )
@@ -491,4 +492,23 @@ func TestVector(t *testing.T) {
 func TestVectorError(t *testing.T) {
 	// mock を使ってテストをする。
 	// Copy関数がエラーを返すようにするmockをつくる
+}
+
+func TestSigmoid(t *testing.T) {
+	var matrix *Matrix
+	var matrix2 *Matrix
+	var answer *Matrix
+	matrix = &Matrix{3, 3, []float64{1, 2, 3, 4, 5, 6, -1, -2, -3}}
+	answer = &Matrix{3, 3, []float64{731059, 880797, 952574, 982014, 993307, 997527, 268941, 119203, 47426}}
+	matrix2 = matrix.Sigmoid()
+	matrix2.MultiEach(1000000)
+	for i := 1; i <= matrix2.row; i++ {
+		for j := 1; j <= matrix2.column; j++ {
+			val, _ := matrix2.At(i, j)
+			ans, _ := answer.At(i, j)
+			if int(math.Floor(val+.5)) != int(ans) {
+				t.Errorf("want %#v got %#v", int(ans), math.Floor(val+.5))
+			}
+		}
+	}
 }
