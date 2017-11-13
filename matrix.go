@@ -247,12 +247,9 @@ func (m *Matrix) SepColumn(start, end int) (*Matrix, error) {
 }
 
 // Vector will return vector version of this matrix
-func (m *Matrix) Vector() (*Matrix, error) {
-	matrix, err := Copy(m)
-	if err != nil {
-		return nil, err
-	}
+func (m *Matrix) Vector() *Matrix {
+	matrix, _ := Copy(m)
 	matrix.row = m.row * m.column
 	matrix.column = 1
-	return matrix, nil
+	return matrix
 }

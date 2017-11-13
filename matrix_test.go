@@ -477,21 +477,12 @@ func TestVector(t *testing.T) {
 	var matrix *Matrix
 	var matrix2 *Matrix
 	var answer *Matrix
-	var err error
 	matrix = &Matrix{2, 3, []float64{1, 2, 3, 4, 5, 6}}
 	answer = &Matrix{6, 1, []float64{1, 2, 3, 4, 5, 6}}
-	matrix2, err = matrix.Vector()
-	if err != nil {
-		t.Errorf("Should be error nil but got %v", err)
-	}
+	matrix2 = matrix.Vector()
 	if !reflect.DeepEqual(answer, matrix2) {
 		t.Errorf("want %#v got %#v", answer, matrix2)
 	}
-}
-
-func TestVectorError(t *testing.T) {
-	// mock を使ってテストをする。
-	// Copy関数がエラーを返すようにするmockをつくる
 }
 
 func TestSigmoid(t *testing.T) {
