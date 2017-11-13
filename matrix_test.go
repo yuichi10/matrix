@@ -6,11 +6,11 @@ import (
 	"testing"
 )
 
-func TestNewMatrix(t *testing.T) {
+func TestNew(t *testing.T) {
 	var matrix *Matrix
 	var answer *Matrix
 	var err error
-	matrix, err = NewMatrix(2, 3, nil)
+	matrix, err = New(2, 3, nil)
 	answer = &Matrix{2, 3, []float64{0, 0, 0, 0, 0, 0}}
 	if err != nil {
 		t.Errorf("Should be error nil but got %v", err)
@@ -19,7 +19,7 @@ func TestNewMatrix(t *testing.T) {
 		t.Errorf("want %#v got %#v", answer, matrix)
 	}
 
-	matrix, err = NewMatrix(2, 3, []float64{1, 2, 3, 4, 5, 6})
+	matrix, err = New(2, 3, []float64{1, 2, 3, 4, 5, 6})
 	answer = &Matrix{2, 3, []float64{1, 2, 3, 4, 5, 6}}
 	if err != nil {
 		t.Errorf("Should be error nil but got %v", err)
@@ -29,33 +29,33 @@ func TestNewMatrix(t *testing.T) {
 	}
 }
 
-func TestNewMatrixError(t *testing.T) {
+func TestNewError(t *testing.T) {
 	var err error
-	_, err = NewMatrix(-1, 2, nil)
+	_, err = New(-1, 2, nil)
 	if err == nil {
 		t.Errorf("Should get error but got nil")
 	}
 
-	_, err = NewMatrix(1, -2, nil)
+	_, err = New(1, -2, nil)
 	if err == nil {
 		t.Errorf("Should get error but got nil")
 	}
 
-	_, err = NewMatrix(0, 2, nil)
+	_, err = New(0, 2, nil)
 	if err == nil {
 		t.Errorf("Should get error but got nil")
 	}
 
-	_, err = NewMatrix(2, 0, nil)
+	_, err = New(2, 0, nil)
 	if err == nil {
 		t.Errorf("Should get error but got nil")
 	}
-	_, err = NewMatrix(2, 3, []float64{1, 2, 3, 4, 5, 6, 7})
+	_, err = New(2, 3, []float64{1, 2, 3, 4, 5, 6, 7})
 	if err == nil {
 		t.Errorf("Should get error but got nil")
 	}
 
-	_, err = NewMatrix(2, 3, []float64{1, 2, 3, 4, 5})
+	_, err = New(2, 3, []float64{1, 2, 3, 4, 5})
 	if err == nil {
 		t.Errorf("Should get error but got nil")
 	}
@@ -110,7 +110,7 @@ func TestCopy(t *testing.T) {
 func TestZeroMatrix(t *testing.T) {
 	var matrix *Matrix
 	var answer *Matrix
-	matrix, _ = NewMatrix(2, 3, nil)
+	matrix, _ = New(2, 3, nil)
 	matrix.matrix = []float64{1, 2, 3, 4, 5, 6}
 	answer = &Matrix{2, 3, []float64{0, 0, 0, 0, 0, 0}}
 	matrix.ZeroMatrix()
@@ -154,7 +154,7 @@ func TestAddRow(t *testing.T) {
 	var answer *Matrix
 	var vector []float64
 	var err error
-	matrix, _ = NewMatrix(2, 3, nil)
+	matrix, _ = New(2, 3, nil)
 	vector = []float64{1, 2, 3}
 	answer = &Matrix{3, 3, []float64{0, 0, 0, 0, 0, 0, 1, 2, 3}}
 	err = matrix.AddRow(vector)
@@ -165,7 +165,7 @@ func TestAddRow(t *testing.T) {
 		t.Errorf("want %#v got %#v", answer, matrix)
 	}
 
-	matrix, _ = NewMatrix(2, 3, nil)
+	matrix, _ = New(2, 3, nil)
 	vector = []float64{1, 2}
 	err = matrix.AddRow(vector)
 	if err == nil {
@@ -216,7 +216,7 @@ func TestAddRowHEAD(t *testing.T) {
 	var answer *Matrix
 	var vector []float64
 	var err error
-	matrix, _ = NewMatrix(2, 3, nil)
+	matrix, _ = New(2, 3, nil)
 	vector = []float64{1, 2, 3}
 	answer = &Matrix{3, 3, []float64{1, 2, 3, 0, 0, 0, 0, 0, 0}}
 	err = matrix.AddRowHEAD(vector)
@@ -263,14 +263,14 @@ func TestAddRowHEADError(t *testing.T) {
 	var matrix2 *Matrix
 	var vector []float64
 	var err error
-	matrix, _ = NewMatrix(2, 3, nil)
+	matrix, _ = New(2, 3, nil)
 	vector = []float64{1, 2}
 	err = matrix.AddRowHEAD(vector)
 	if err == nil {
 		t.Errorf("Should get error but got nil")
 	}
-	matrix, _ = NewMatrix(2, 3, nil)
-	matrix2, _ = NewMatrix(2, 2, nil)
+	matrix, _ = New(2, 3, nil)
+	matrix2, _ = New(2, 2, nil)
 	err = matrix.AddRowHEAD(matrix2)
 	if err == nil {
 		t.Errorf("Should get error but got nil")
@@ -298,7 +298,7 @@ func ExampleShow() {
 
 func TestSize(t *testing.T) {
 	var matrix *Matrix
-	matrix, _ = NewMatrix(2, 3, nil)
+	matrix, _ = New(2, 3, nil)
 	r, c := matrix.Size()
 	if r != 2 || c != 3 {
 		t.Errorf("want %v %v got %v %v", 2, 3, r, c)
@@ -308,7 +308,7 @@ func TestSize(t *testing.T) {
 func TestAt(t *testing.T) {
 	var err error
 	var matrix *Matrix
-	matrix, _ = NewMatrix(2, 3, nil)
+	matrix, _ = New(2, 3, nil)
 	matrix.matrix = []float64{1, 2, 3, 4, 5, 6}
 	count := 0
 	for i := 1; i <= 2; i++ {
@@ -335,8 +335,8 @@ func TestSet(t *testing.T) {
 	var err error
 	var matrix *Matrix
 	var answer *Matrix
-	matrix, _ = NewMatrix(2, 3, nil)
-	answer, _ = NewMatrix(2, 3, nil)
+	matrix, _ = New(2, 3, nil)
+	answer, _ = New(2, 3, nil)
 	answer.matrix = []float64{1, 2, 3, 4, 5, 6}
 	count := 0
 	for i := 1; i <= 2; i++ {

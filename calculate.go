@@ -68,7 +68,7 @@ func (m *Matrix) multiByMatrix(mat Matrix) error {
 	if err := m.checkCanMulti(mat); err != nil {
 		return err
 	}
-	matrix, _ := NewMatrix(m.row, mat.column, nil)
+	matrix, _ := New(m.row, mat.column, nil)
 	for i := 0; i < m.row*mat.column; i++ {
 		matrix.matrix[i] = m.multiAtIndex(mat, i)
 	}
@@ -84,7 +84,7 @@ func (m *Matrix) multiByMatrixParallel(mat Matrix) error {
 	calcInfo := make(chan *calcMultiInfo)
 	wg.Add(1)
 	go m.multiAtIndexParallel(ctx, calcInfo)
-	matrix, _ := NewMatrix(m.row, mat.column, nil)
+	matrix, _ := New(m.row, mat.column, nil)
 	for i := 0; i < m.row*mat.column; i++ {
 		info := &calcMultiInfo{result: matrix, op2: &mat, index: i}
 		calcInfo <- info

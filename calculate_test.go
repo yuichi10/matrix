@@ -7,7 +7,7 @@ import (
 )
 
 func createUniformMatrix(row, column int, val float64) *Matrix {
-	matrix, _ := NewMatrix(row, column, nil)
+	matrix, _ := New(row, column, nil)
 	for i := 1; i <= row; i++ {
 		for j := 1; j <= column; j++ {
 			matrix.Set(i, j, val)

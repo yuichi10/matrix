@@ -13,8 +13,8 @@ type Matrix struct {
 	matrix []float64 // 行 * 列の長さ
 }
 
-// NewMatrix will return *Matrix
-func NewMatrix(row, column int, vector []float64) (*Matrix, error) {
+// New will return *Matrix
+func New(row, column int, vector []float64) (*Matrix, error) {
 	matrix := new(Matrix)
 	if row <= 0 || column <= 0 {
 		return nil, errors.New("Length is not greater 0")
@@ -224,7 +224,7 @@ func (m *Matrix) SepRow(start, end int) (*Matrix, error) {
 	}
 	s := (start - 1) * m.column
 	e := (end - 1) * m.column
-	matrix, err := NewMatrix(end-start+1, m.column, m.matrix[s:e+m.column])
+	matrix, err := New(end-start+1, m.column, m.matrix[s:e+m.column])
 	return matrix, err
 }
 
@@ -243,7 +243,7 @@ func (m *Matrix) SepColumn(start, end int) (*Matrix, error) {
 			count++
 		}
 	}
-	return NewMatrix(m.row, end-start+1, vector)
+	return New(m.row, end-start+1, vector)
 }
 
 // Vector will return vector version of this matrix
