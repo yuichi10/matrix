@@ -163,7 +163,7 @@ matrix.Transpose()
 
 ### SepRow matrix
 ```golang
-matrix := &Matrix{6, 3, []float64{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18}}
+matrix := matrix.New{6, 3, []float64{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18}}
 matrix2 := matrix.SepRow(2, 4)
 // then you will get matrix2
 // 4, 5, 6
@@ -173,12 +173,22 @@ matrix2 := matrix.SepRow(2, 4)
 
 ### SepColumn matrix
 ```golang
-matrix = &Matrix{3, 6, []float64{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18}}
+matrix = matrix.New{3, 6, []float64{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18}}
 matrix2 := matrix.SepColumn(2, 4)
 // then you will get matrix2
 // 2, 3, 4
 // 8, 9, 10
 // 14, 15, 16
+```
+
+### Sigmoid
+```golang
+matrix := matrix.New{3, 4, []float64{1, 2, 3, 4, 5, 6, -1, -2, -3}}
+matrix2 := matrix.Sigmoid()
+// then you will get (almost)
+// 0.731059   0.880797   0.952574
+// 0.982014   0.993307   0.997527
+// 0.268941   0.119203   0.047426
 ```
 
 ### Show matrix
