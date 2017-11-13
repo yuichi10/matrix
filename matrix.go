@@ -49,14 +49,11 @@ func NewVector(row []float64) (*Matrix, error) {
 }
 
 // Copy will copy matrix
-func Copy(mat *Matrix) (*Matrix, error) {
-	if err := mat.checkNormal(); err != nil {
-		return nil, err
-	}
+func Copy(mat *Matrix) *Matrix {
 	vector := make([]float64, len(mat.matrix))
 	copy(vector, mat.matrix)
 	matrix := &Matrix{mat.row, mat.column, vector}
-	return matrix, nil
+	return matrix
 }
 
 // ZeroMatrix make all value 0
@@ -248,7 +245,7 @@ func (m *Matrix) SepColumn(start, end int) (*Matrix, error) {
 
 // Vector will return vector version of this matrix
 func (m *Matrix) Vector() *Matrix {
-	matrix, _ := Copy(m)
+	matrix := Copy(m)
 	matrix.row = m.row * m.column
 	matrix.column = 1
 	return matrix

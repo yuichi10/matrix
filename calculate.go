@@ -194,7 +194,7 @@ func (m *Matrix) MultiEach(num interface{}) error {
 
 // Sigmoid will return sigmoied matrix
 func (m *Matrix) Sigmoid() *Matrix {
-	matrix, _ := Copy(m)
+	matrix := Copy(m)
 	for i := 1; i <= matrix.row; i++ {
 		for j := 1; j <= matrix.column; j++ {
 			val, _ := matrix.At(i, j)
