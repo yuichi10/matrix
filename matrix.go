@@ -56,11 +56,6 @@ func Copy(mat *Matrix) *Matrix {
 	return matrix
 }
 
-// ZeroMatrix make all value 0
-func (m *Matrix) ZeroMatrix() {
-	m.matrix = make([]float64, m.row*m.column)
-}
-
 // AddRowMatrix will add matrix behinde this matrix
 func (m *Matrix) addRowMatrix(mat Matrix) error {
 	if m.column != mat.column {
@@ -214,21 +209,6 @@ func (m *Matrix) SetMatrix(mat *Matrix) error {
 	return nil
 }
 
-// Transpose will make transposed vector
-func (m *Matrix) Transpose() (matrix *Matrix) {
-	matrix = Copy(m)
-	count := 0
-	for i := 0; i < matrix.column; i++ {
-		for j := 0; j < matrix.row; j++ {
-			matrix.matrix[count] = m.matrix[j*m.column+i]
-			count++
-		}
-	}
-	matrix.row = m.column
-	matrix.column = m.row
-	return
-}
-
 // SepRow will return matrix which separate by row numbers
 func (m *Matrix) SepRow(start, end int) (*Matrix, error) {
 	if end < start {
@@ -258,12 +238,4 @@ func (m *Matrix) SepColumn(start, end int) (*Matrix, error) {
 		}
 	}
 	return New(m.row, end-start+1, vector)
-}
-
-// Vector will return vector version of this matrix
-func (m *Matrix) Vector() *Matrix {
-	matrix := Copy(m)
-	matrix.row = m.row * m.column
-	matrix.column = 1
-	return matrix
 }
