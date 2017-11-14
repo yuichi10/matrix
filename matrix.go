@@ -8,9 +8,10 @@ import (
 
 // Matrix has information of matrix
 type Matrix struct {
-	row    int       // 行
-	column int       // 列
-	matrix []float64 // 行 * 列の長さ
+	row     int       // 行
+	column  int       // 列
+	matrix  []float64 // 行 * 列の長さ
+	calcErr error
 }
 
 // New will return *Matrix
@@ -48,11 +49,16 @@ func NewVector(row []float64) (*Matrix, error) {
 	return matrix, nil
 }
 
+// CalcErr will return error of calcuration
+func (m *Matrix) CalcErr() error {
+	return m.calcErr
+}
+
 // Copy will copy matrix
 func Copy(mat *Matrix) *Matrix {
 	vector := make([]float64, len(mat.matrix))
 	copy(vector, mat.matrix)
-	matrix := &Matrix{mat.row, mat.column, vector}
+	matrix := &Matrix{mat.row, mat.column, vector, mat.calcErr}
 	return matrix
 }
 

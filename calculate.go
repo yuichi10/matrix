@@ -2,7 +2,6 @@ package matrix
 
 import (
 	"context"
-	"errors"
 	"sync"
 )
 
@@ -123,14 +122,30 @@ func (m *Matrix) multiByFloat(num float64) {
 }
 
 // Add will add some value to Matrix
-func (m *Matrix) Add(num interface{}) (matrix *Matrix, err error) {
+func (m *Matrix) Add(num interface{}) (matrix *Matrix) {
+	var err error
 	matrix = Copy(m)
+	if m.CalcErr() != nil {
+		return
+	}
 	if mat, ok := num.(Matrix); ok {
-		err = matrix.addByMatrix(mat)
+		if mat.CalcErr() != nil {
+			matrix.calcErr = mat.calcErr
+			return
+		}
+		if err = matrix.addByMatrix(mat); err != nil {
+			matrix.calcErr = &MatrixError{msg: err.Error(), funcName: "Add"}
+		}
 		return
 	}
 	if mat, ok := num.(*Matrix); ok {
-		err = matrix.addByMatrix(*mat)
+		if mat.CalcErr() != nil {
+			matrix.calcErr = mat.calcErr
+			return
+		}
+		if err = matrix.addByMatrix(*mat); err != nil {
+			matrix.calcErr = &MatrixError{msg: err.Error(), funcName: "Add"}
+		}
 		return
 	}
 	if mat, ok := num.(int); ok {
@@ -141,18 +156,34 @@ func (m *Matrix) Add(num interface{}) (matrix *Matrix, err error) {
 		matrix.addByFloat(float64(mat))
 		return
 	}
-	err = errors.New("The add type is not allowed")
+	matrix.calcErr = &MatrixError{msg: "The add type is not allowed", funcName: "Add"}
 	return
 }
 
 // Sub will calculate sub of matrix
-func (m *Matrix) Sub(num interface{}) (matrix *Matrix, err error) {
+func (m *Matrix) Sub(num interface{}) (matrix *Matrix) {
+	var err error
 	matrix = Copy(m)
+	if m.CalcErr() != nil {
+		return
+	}
 	if mat, ok := num.(Matrix); ok {
-		err = matrix.subByMatrix(mat)
+		if mat.CalcErr() != nil {
+			matrix.calcErr = mat.calcErr
+			return
+		}
+		if err = matrix.subByMatrix(mat); err != nil {
+			matrix.calcErr = &MatrixError{msg: err.Error(), funcName: "Sub"}
+		}
 		return
 	} else if mat, ok := num.(*Matrix); ok {
-		err = matrix.subByMatrix(*mat)
+		if mat.CalcErr() != nil {
+			matrix.calcErr = mat.calcErr
+			return
+		}
+		if err = matrix.subByMatrix(*mat); err != nil {
+			matrix.calcErr = &MatrixError{msg: err.Error(), funcName: "Sub"}
+		}
 		return
 	} else if mat, ok := num.(float64); ok {
 		matrix.subByFloat(mat)
@@ -161,18 +192,34 @@ func (m *Matrix) Sub(num interface{}) (matrix *Matrix, err error) {
 		matrix.subByFloat(float64(mat))
 		return
 	}
-	err = errors.New("The sub op2 type is not allowed")
+	matrix.calcErr = &MatrixError{msg: "The sub op2 type is not allowed", funcName: "Sub"}
 	return
 }
 
 // Multi will calculate Multi
-func (m *Matrix) Multi(num interface{}) (matrix *Matrix, err error) {
+func (m *Matrix) Multi(num interface{}) (matrix *Matrix) {
+	var err error
 	matrix = Copy(m)
+	if m.CalcErr() != nil {
+		return
+	}
 	if mat, ok := num.(Matrix); ok {
-		err = matrix.multiByMatrixParallel(mat)
+		if mat.CalcErr() != nil {
+			matrix.calcErr = mat.calcErr
+			return
+		}
+		if err = matrix.multiByMatrixParallel(mat); err != nil {
+			matrix.calcErr = &MatrixError{msg: err.Error(), funcName: "Multi"}
+		}
 		return
 	} else if mat, ok := num.(*Matrix); ok {
-		err = matrix.multiByMatrixParallel(*mat)
+		if mat.CalcErr() != nil {
+			matrix.calcErr = mat.calcErr
+			return
+		}
+		if err = matrix.multiByMatrixParallel(*mat); err != nil {
+			matrix.calcErr = &MatrixError{msg: err.Error(), funcName: "Multi"}
+		}
 		return
 	} else if mat, ok := num.(float64); ok {
 		matrix.multiByFloat(float64(mat))
@@ -181,18 +228,34 @@ func (m *Matrix) Multi(num interface{}) (matrix *Matrix, err error) {
 		matrix.multiByFloat(float64(mat))
 		return
 	}
-	err = errors.New("The multi op2 type is not allowed")
+	matrix.calcErr = &MatrixError{msg: "The multi op2 type is not allowed", funcName: "Multi"}
 	return
 }
 
 // MultiEach will do calculate each multi
-func (m *Matrix) MultiEach(num interface{}) (matrix *Matrix, err error) {
+func (m *Matrix) MultiEach(num interface{}) (matrix *Matrix) {
+	var err error
 	matrix = Copy(m)
+	if m.CalcErr() != nil {
+		return
+	}
 	if mat, ok := num.(Matrix); ok {
-		err = matrix.multiEachByMatrix(mat)
+		if mat.CalcErr() != nil {
+			matrix.calcErr = mat.calcErr
+			return
+		}
+		if err = matrix.multiEachByMatrix(mat); err != nil {
+			matrix.calcErr = &MatrixError{msg: err.Error(), funcName: "MultiEach"}
+		}
 		return
 	} else if mat, ok := num.(*Matrix); ok {
-		err = matrix.multiEachByMatrix(*mat)
+		if mat.CalcErr() != nil {
+			matrix.calcErr = mat.calcErr
+			return
+		}
+		if err = matrix.multiEachByMatrix(*mat); err != nil {
+			matrix.calcErr = &MatrixError{msg: err.Error(), funcName: "MultiEach"}
+		}
 		return
 	} else if mat, ok := num.(float64); ok {
 		matrix.multiByFloat(float64(mat))
@@ -201,7 +264,7 @@ func (m *Matrix) MultiEach(num interface{}) (matrix *Matrix, err error) {
 		matrix.multiByFloat(float64(mat))
 		return
 	}
-	err = errors.New("The multi op2 type is not allowed")
+	matrix.calcErr = &MatrixError{msg: "The multi op2 type is not allowed", funcName: "MultiEach"}
 	return
 }
 

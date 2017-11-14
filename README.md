@@ -211,62 +211,67 @@ matrix.Show()
 ```
 
 # calculation
+
+Calculation will not return error because its annoying to calculate complex formula.
+Thus matrix has calculation error by their own and if error happen while calculation, matrix will have calculation error. When matrix call calcurate function with error, they will not calculate. Just return matrix which take over error.
+If you want to check calculation error, you can call **CalcErr()** mthod of matrix after calculation.
+
 ### Add
 ```golang
 matrix := matrix.New(2, 3, []float64{1, 2, 3, 4, 5, 6})
-matrix, err = matrix.Add(2)
+matrix = matrix.Add(2)
 // then matrix will be
 // 3 4 5
 // 6 7 8
 
 matrix2 := matrix.New(2, 3, []float64{1, 2, 3, 4, 5, 6})
-matrix, err = matrix.Add(matrix2)
+matrix = matrix.Add(matrix2)
 // then matrix will be
 // 2 4 6
 // 8 10 12
 ```
 ### Sub
 ```golang
-matrix, err := matrix.New(2, 3, []float64{1, 2, 3, 4, 5, 6})
-matrix, err = matrix.Sub(2)
+matrix := matrix.New(2, 3, []float64{1, 2, 3, 4, 5, 6})
+matrix = matrix.Sub(2)
 // then matrix will be
 // -1 0 1
 // 2 3 4
 
 matrix2 := matrix.New(2, 3, []float64{1, 2, 3, 4, 5, 6})
-matrix, err = matrix.Sub(matrix2)
+matrix = matrix.Sub(matrix2)
 // then matrix will be
 // 0 0 0
 // 0 0 0
 ```
 ### Multi
 ```golang
-matrix, err := matrix.New(2, 3, []float64{1, 2, 3, 4, 5, 6})
-matrix, err = matrix.Multi(2)
+matrix := matrix.New(2, 3, []float64{1, 2, 3, 4, 5, 6})
+matrix = matrix.Multi(2)
 // then matrix will be
 // it do the same move to Multi Each
 // 2 4 6
 // 8 10 12
 
-matrix, err = matrix.New(2, 3, []float64{1, 2, 3, 4, 5, 6})
-matrix2, err = matrix.New(3, 1, []float64{1, 2, 3})
-matrix, err = matrix.Multi(matrix2)
+matrix = matrix.New(2, 3, []float64{1, 2, 3, 4, 5, 6})
+matrix2 = matrix.New(3, 1, []float64{1, 2, 3})
+matrix = matrix.Multi(matrix2)
 // if you Multi matrix your matrix will be
 // 14
 // 32
 ```
 ### Multi Each
 ```golang
-matrix, err := matrix.New(2, 3, []float64{1, 2, 3, 4, 5, 6})
-matrix, err = matrix.MultiEach(2)
+matrix := matrix.New(2, 3, []float64{1, 2, 3, 4, 5, 6})
+matrix = matrix.MultiEach(2)
 // then matrix will be
 // it do the same move to Multi Each
 // 2 4 6
 // 8 10 12
 
-matrix, err = matrix.New(2, 3, []float64{1, 2, 3, 4, 5, 6})
-matrix2, err = matrix.New(3, 1, []float64{1, 2, 3, 4, 5, 6})
-matrix, err = matrix.MultiEach(matrix2)
+matrix = matrix.New(2, 3, []float64{1, 2, 3, 4, 5, 6})
+matrix2 = matrix.New(3, 1, []float64{1, 2, 3, 4, 5, 6})
+matrix = matrix.MultiEach(matrix2)
 // if you Multi matrix your matrix will be
 // 1 4 9
 // 12 25 36
@@ -274,7 +279,7 @@ matrix, err = matrix.MultiEach(matrix2)
 
 ### Sigmoid
 ```golang
-matrix, err := matrix.New{3, 4, []float64{1, 2, 3, 4, 5, 6, -1, -2, -3}}
+matrix := matrix.New{3, 4, []float64{1, 2, 3, 4, 5, 6, -1, -2, -3}}
 matrix = matrix.Sigmoid()
 // then you will get (almost)
 // 0.731059   0.880797   0.952574
