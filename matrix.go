@@ -161,6 +161,7 @@ func (m *Matrix) AddRowHEAD(num interface{}) (matrix *Matrix, err error) {
 
 // Show will show matrix condition
 func (m *Matrix) Show() {
+	fmt.Printf("size: %v x %v\n", m.Row(), m.Column())
 	for i := 0; i < m.row; i++ {
 		line := ""
 		for j := 0; j < m.column; j++ {
@@ -213,6 +214,17 @@ func (m *Matrix) SetMatrix(mat *Matrix) error {
 	m.column = mat.column
 	m.matrix = vector
 	return nil
+}
+
+// Reshape will change vect
+func (m *Matrix) Reshape(row, column int) (*Matrix, error) {
+	matrix := Copy(m)
+	matrix.row = row
+	matrix.column = column
+	if err := matrix.checkNormal(); err != nil {
+		return nil, err
+	}
+	return matrix, nil
 }
 
 // SepRow will return matrix which separate by row numbers

@@ -150,6 +150,15 @@ err = matrix.Set(2, 1, float64(3.5))
 // 3.5 5 6
 ```
 
+### Reshape
+```golang
+matrix, err := matrix.New(6, 1, []float64{1, 2, 3, 4, 5, 6})
+matrix, err = matrix.Reshape(2, 3)
+// then you will get
+// 1 2 3
+// 4 5 6
+```
+
 ### Substitution B to A
 ```golang
 A := matrix.New(2, 3, []float64{1, 2, 3, 4, 5, 6})

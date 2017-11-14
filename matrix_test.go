@@ -256,8 +256,10 @@ func ExampleShow() {
 	matrix = &Matrix{3, 2, []float64{1, 2, 3, 4, 5, 6}, nil}
 	matrix.Show()
 	// Output:
+	// size: 2 x 3
 	// 1 2 3
 	// 4 5 6
+	// size: 3 x 2
 	// 1 2
 	// 3 4
 	// 5 6
@@ -360,6 +362,37 @@ func TestSetMatrix(t *testing.T) {
 	}
 	answer = &Matrix{-1, 2, []float64{}, nil}
 	err = matrix.SetMatrix(answer)
+	if err == nil {
+		t.Errorf("Should get error but got nil")
+	}
+}
+
+func TestReshape(t *testing.T) {
+	var err error
+	var matrix *Matrix
+	var answer *Matrix
+	matrix, _ = NewVector([]float64{1, 2, 3, 4, 5, 6})
+	answer = &Matrix{2, 3, []float64{1, 2, 3, 4, 5, 6}, nil}
+	matrix, err = matrix.Reshape(2, 3)
+	if err != nil {
+		t.Errorf("Should be error nil but got %v", err)
+	}
+	if !reflect.DeepEqual(answer, matrix) {
+		t.Errorf("want %#v got %#v", answer, matrix)
+	}
+}
+
+func TestReshapeError(t *testing.T) {
+	var err error
+	var matrix *Matrix
+	matrix, _ = NewVector([]float64{1, 2, 3, 4, 5, 6})
+	matrix, err = matrix.Reshape(3, 3)
+	if err == nil {
+		t.Errorf("Should get error but got nil")
+	}
+
+	matrix, _ = NewVector([]float64{1, 2, 3, 4, 5, 6})
+	matrix, err = matrix.Reshape(2, 2)
 	if err == nil {
 		t.Errorf("Should get error but got nil")
 	}
