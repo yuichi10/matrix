@@ -10,45 +10,45 @@ func TestNew(t *testing.T) {
 	var matrix *Matrix
 	var answer *Matrix
 	var err error
-	matrix, err = New(2, 3, nil)
+	matrix = New(2, 3, nil)
 	answer = &Matrix{2, 3, []float64{0, 0, 0, 0, 0, 0}, nil}
-	if err != nil {
+	if matrix.Err() != nil {
 		t.Errorf("Should be error nil but got %v", err)
 	}
 	if !reflect.DeepEqual(answer, matrix) {
 		t.Errorf("want %#v got %#v", answer, matrix)
 	}
 
-	matrix, err = New(2, 3, []float64{1, 2, 3, 4, 5, 6})
+	matrix = New(2, 3, []float64{1, 2, 3, 4, 5, 6})
 	answer = &Matrix{2, 3, []float64{1, 2, 3, 4, 5, 6}, nil}
-	if err != nil {
+	if matrix.Err() != nil {
 		t.Errorf("Should be error nil but got %v", err)
 	}
 	if !reflect.DeepEqual(answer, matrix) {
 		t.Errorf("want %#v got %#v", answer, matrix)
 	}
 
-	matrix, err = New(2, 3, []float64{})
+	matrix = New(2, 3, []float64{})
 	answer = &Matrix{2, 3, []float64{0, 0, 0, 0, 0, 0}, nil}
-	if err != nil {
+	if matrix.Err() != nil {
 		t.Errorf("Should be error nil but got %v", err)
 	}
 	if !reflect.DeepEqual(answer, matrix) {
 		t.Errorf("want %#v got %#v", answer, matrix)
 	}
 
-	matrix, err = New(2, 3, 7)
+	matrix = New(2, 3, 7)
 	answer = &Matrix{2, 3, []float64{7, 7, 7, 7, 7, 7}, nil}
-	if err != nil {
+	if matrix.Err() != nil {
 		t.Errorf("Should be error nil but got %v", err)
 	}
 	if !reflect.DeepEqual(answer, matrix) {
 		t.Errorf("want %#v got %#v", answer, matrix)
 	}
 
-	matrix, err = New(2, 3, 7.7)
+	matrix = New(2, 3, 7.7)
 	answer = &Matrix{2, 3, []float64{7.7, 7.7, 7.7, 7.7, 7.7, 7.7}, nil}
-	if err != nil {
+	if matrix.Err() != nil {
 		t.Errorf("Should be error nil but got %v", err)
 	}
 	if !reflect.DeepEqual(answer, matrix) {
@@ -57,38 +57,38 @@ func TestNew(t *testing.T) {
 }
 
 func TestNewError(t *testing.T) {
-	var err error
-	_, err = New(-1, 2, nil)
-	if err == nil {
+	var matrix *Matrix
+	matrix = New(-1, 2, nil)
+	if matrix.Err() == nil {
 		t.Errorf("Should get error but got nil")
 	}
 
-	_, err = New(1, -2, nil)
-	if err == nil {
+	matrix = New(1, -2, nil)
+	if matrix.Err() == nil {
 		t.Errorf("Should get error but got nil")
 	}
 
-	_, err = New(0, 2, nil)
-	if err == nil {
+	matrix = New(0, 2, nil)
+	if matrix.Err() == nil {
 		t.Errorf("Should get error but got nil")
 	}
 
-	_, err = New(2, 0, nil)
-	if err == nil {
+	matrix = New(2, 0, nil)
+	if matrix.Err() == nil {
 		t.Errorf("Should get error but got nil")
 	}
-	_, err = New(2, 3, []float64{1, 2, 3, 4, 5, 6, 7})
-	if err == nil {
-		t.Errorf("Should get error but got nil")
-	}
-
-	_, err = New(2, 3, []float64{1, 2, 3, 4, 5})
-	if err == nil {
+	matrix = New(2, 3, []float64{1, 2, 3, 4, 5, 6, 7})
+	if matrix.Err() == nil {
 		t.Errorf("Should get error but got nil")
 	}
 
-	_, err = New(2, 3, "not allowed argument")
-	if err == nil {
+	matrix = New(2, 3, []float64{1, 2, 3, 4, 5})
+	if matrix.Err() == nil {
+		t.Errorf("Should get error but got nil")
+	}
+
+	matrix = New(2, 3, "not allowed argument")
+	if matrix.Err() == nil {
 		t.Errorf("Should get error but got nil")
 	}
 }
@@ -100,30 +100,30 @@ func TestNewVector(t *testing.T) {
 	var err error
 	vector = []float64{1, 2, 3}
 	answer = &Matrix{3, 1, []float64{1, 2, 3}, nil}
-	matrix, err = NewVector(vector)
-	if err != nil {
+	matrix = NewVector(vector)
+	if matrix.Err() != nil {
 		t.Errorf("Should be error nil but got %v", err)
 	}
 	if !reflect.DeepEqual(answer, matrix) {
 		t.Errorf("want %#v got %#v", answer, matrix)
 	}
 
-	matrix, err = NewVector(nil)
-	if err == nil {
+	matrix = NewVector(nil)
+	if matrix.Err() == nil {
 		t.Errorf("Should get error but got nil")
 	}
 
-	matrix, err = NewVector([]float64{})
-	if err == nil {
+	matrix = NewVector([]float64{})
+	if matrix.Err() == nil {
 		t.Errorf("Should get error but got nil")
 	}
 }
 
-func TestCalcErr(t *testing.T) {
+func TestErr(t *testing.T) {
 	var matrix *Matrix
-	matrix, _ = New(1, 2, nil)
-	matrix.calcErr = errors.New("error")
-	if matrix.CalcErr() == nil {
+	matrix = New(1, 2, nil)
+	matrix.err = errors.New("error")
+	if matrix.Err() == nil {
 		t.Errorf("Should get error but got nil")
 	}
 }
@@ -143,13 +143,12 @@ func TestAddRow(t *testing.T) {
 	var matrix2 *Matrix
 	var answer *Matrix
 	var vector []float64
-	var err error
-	matrix, _ = New(2, 3, nil)
+	matrix = New(2, 3, nil)
 	vector = []float64{1, 2, 3}
 	answer = &Matrix{3, 3, []float64{0, 0, 0, 0, 0, 0, 1, 2, 3}, nil}
-	matrix, err = matrix.AddRow(vector)
-	if err != nil {
-		t.Errorf("Should be error nil but got %v", err)
+	matrix = matrix.AddRow(vector)
+	if matrix.Err() != nil {
+		t.Errorf("Should be error nil but got %v", matrix.Err())
 	}
 	if !reflect.DeepEqual(answer, matrix) {
 		t.Errorf("want %#v got %#v", answer, matrix)
@@ -158,26 +157,26 @@ func TestAddRow(t *testing.T) {
 	matrix = &Matrix{2, 3, []float64{1, 2, 3, 4, 5, 6}, nil}
 	matrix2 = &Matrix{3, 3, []float64{7, 8, 9, 10, 11, 12, 13, 14, 15}, nil}
 	answer = &Matrix{5, 3, []float64{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15}, nil}
-	matrix, _ = matrix.AddRow(*matrix2)
+	matrix = matrix.AddRow(*matrix2)
 	if !reflect.DeepEqual(answer, matrix) {
 		t.Errorf("want %#v got %#v", answer, matrix)
 	}
 	matrix = &Matrix{2, 3, []float64{1, 2, 3, 4, 5, 6}, nil}
-	matrix, _ = matrix.AddRow(matrix2)
+	matrix = matrix.AddRow(matrix2)
 	if !reflect.DeepEqual(answer, matrix) {
 		t.Errorf("want %#v got %#v", answer, matrix)
 	}
 
 	matrix = &Matrix{2, 3, []float64{1, 2, 3, 4, 5, 6}, nil}
 	answer = &Matrix{3, 3, []float64{1, 2, 3, 4, 5, 6, 7, 7, 7}, nil}
-	matrix, _ = matrix.AddRow(7)
+	matrix = matrix.AddRow(7)
 	if !reflect.DeepEqual(answer, matrix) {
 		t.Errorf("want %#v got %#v", answer, matrix)
 	}
 
 	matrix = &Matrix{2, 3, []float64{1, 2, 3, 4, 5, 6}, nil}
 	answer = &Matrix{3, 3, []float64{1, 2, 3, 4, 5, 6, 7.6, 7.6, 7.6}, nil}
-	matrix, _ = matrix.AddRow(7.6)
+	matrix = matrix.AddRow(7.6)
 	if !reflect.DeepEqual(answer, matrix) {
 		t.Errorf("want %#v got %#v", answer, matrix)
 	}
@@ -187,24 +186,23 @@ func TestAddRowError(t *testing.T) {
 	var matrix *Matrix
 	var matrix2 *Matrix
 	var vector []float64
-	var err error
 	matrix = &Matrix{2, 3, []float64{1, 2, 3, 4, 5, 6}, nil}
-	_, err = matrix.AddRow("this is not allowed")
-	if err == nil {
+	matrix = matrix.AddRow("this is not allowed")
+	if matrix.Err() == nil {
 		t.Errorf("Should get error but got nil")
 	}
 
-	matrix, _ = New(2, 3, nil)
+	matrix = New(2, 3, nil)
 	vector = []float64{1, 2}
-	matrix, err = matrix.AddRow(vector)
-	if err == nil {
+	matrix = matrix.AddRow(vector)
+	if matrix.Err() == nil {
 		t.Errorf("Should get error but got nil")
 	}
 
 	matrix = &Matrix{2, 3, []float64{1, 2, 3, 4, 5, 6}, nil}
 	matrix2 = &Matrix{3, 2, []float64{7, 8, 9, 10, 11, 12, 13, 14, 15}, nil}
-	_, err = matrix.AddRow(*matrix2)
-	if err == nil {
+	matrix = matrix.AddRow(*matrix2)
+	if matrix.Err() == nil {
 		t.Errorf("Should get error but got nil")
 	}
 }
@@ -214,13 +212,12 @@ func TestAddRowHEAD(t *testing.T) {
 	var matrix2 *Matrix
 	var answer *Matrix
 	var vector []float64
-	var err error
-	matrix, _ = New(2, 3, nil)
+	matrix = New(2, 3, nil)
 	vector = []float64{1, 2, 3}
 	answer = &Matrix{3, 3, []float64{1, 2, 3, 0, 0, 0, 0, 0, 0}, nil}
-	matrix, err = matrix.AddRowHEAD(vector)
-	if err != nil {
-		t.Errorf("Should be error nil but got %v", err)
+	matrix = matrix.AddRowHEAD(vector)
+	if matrix.Err() != nil {
+		t.Errorf("Should be error nil but got %v", matrix.Err())
 	}
 	if !reflect.DeepEqual(answer, matrix) {
 		t.Errorf("want %#v got %#v", answer, matrix)
@@ -229,7 +226,7 @@ func TestAddRowHEAD(t *testing.T) {
 	matrix = &Matrix{2, 3, []float64{1, 2, 3, 4, 5, 6}, nil}
 	matrix2 = &Matrix{3, 3, []float64{7, 8, 9, 10, 11, 12, 13, 14, 15}, nil}
 	answer = &Matrix{5, 3, []float64{7, 8, 9, 10, 11, 12, 13, 14, 15, 1, 2, 3, 4, 5, 6}, nil}
-	matrix, _ = matrix.AddRowHEAD(matrix2)
+	matrix = matrix.AddRowHEAD(matrix2)
 	if !reflect.DeepEqual(answer, matrix) {
 		t.Errorf("want %#v got %#v", answer, matrix)
 	}
@@ -237,21 +234,21 @@ func TestAddRowHEAD(t *testing.T) {
 	matrix = &Matrix{2, 3, []float64{1, 2, 3, 4, 5, 6}, nil}
 	matrix2 = &Matrix{3, 3, []float64{7, 8, 9, 10, 11, 12, 13, 14, 15}, nil}
 	answer = &Matrix{5, 3, []float64{7, 8, 9, 10, 11, 12, 13, 14, 15, 1, 2, 3, 4, 5, 6}, nil}
-	matrix, _ = matrix.AddRowHEAD(*matrix2)
+	matrix = matrix.AddRowHEAD(*matrix2)
 	if !reflect.DeepEqual(answer, matrix) {
 		t.Errorf("want %#v got %#v", answer, matrix)
 	}
 
 	matrix = &Matrix{2, 3, []float64{1, 2, 3, 4, 5, 6}, nil}
 	answer = &Matrix{3, 3, []float64{7, 7, 7, 1, 2, 3, 4, 5, 6}, nil}
-	matrix, _ = matrix.AddRowHEAD(7)
+	matrix = matrix.AddRowHEAD(7)
 	if !reflect.DeepEqual(answer, matrix) {
 		t.Errorf("want %#v got %#v", answer, matrix)
 	}
 
 	matrix = &Matrix{2, 3, []float64{1, 2, 3, 4, 5, 6}, nil}
 	answer = &Matrix{3, 3, []float64{7.8, 7.8, 7.8, 1, 2, 3, 4, 5, 6}, nil}
-	matrix, _ = matrix.AddRowHEAD(7.8)
+	matrix = matrix.AddRowHEAD(7.8)
 	if !reflect.DeepEqual(answer, matrix) {
 		t.Errorf("want %#v got %#v", answer, matrix)
 	}
@@ -261,22 +258,21 @@ func TestAddRowHEADError(t *testing.T) {
 	var matrix *Matrix
 	var matrix2 *Matrix
 	var vector []float64
-	var err error
-	matrix, _ = New(2, 3, nil)
+	matrix = New(2, 3, nil)
 	vector = []float64{1, 2}
-	_, err = matrix.AddRowHEAD(vector)
-	if err == nil {
+	matrix = matrix.AddRowHEAD(vector)
+	if matrix.Err() == nil {
 		t.Errorf("Should get error but got nil")
 	}
-	matrix, _ = New(2, 3, nil)
-	matrix2, _ = New(2, 2, nil)
-	_, err = matrix.AddRowHEAD(matrix2)
-	if err == nil {
+	matrix = New(2, 3, nil)
+	matrix2 = New(2, 2, nil)
+	matrix = matrix.AddRowHEAD(matrix2)
+	if matrix.Err() == nil {
 		t.Errorf("Should get error but got nil")
 	}
 
-	_, err = matrix.AddRowHEAD("this type is not allowed")
-	if err == nil {
+	matrix = matrix.AddRowHEAD("this type is not allowed")
+	if matrix.Err() == nil {
 		t.Errorf("Should get error but got nil")
 	}
 }
@@ -299,7 +295,7 @@ func ExampleShow() {
 
 func TestSize(t *testing.T) {
 	var matrix *Matrix
-	matrix, _ = New(2, 3, nil)
+	matrix = New(2, 3, nil)
 	r, c := matrix.Size()
 	if r != 2 || c != 3 {
 		t.Errorf("want %v %v got %v %v", 2, 3, r, c)
@@ -308,7 +304,7 @@ func TestSize(t *testing.T) {
 
 func TestRow(t *testing.T) {
 	var matrix *Matrix
-	matrix, _ = New(7, 12, nil)
+	matrix = New(7, 12, nil)
 	r := matrix.Row()
 	if r != 7 {
 		t.Errorf("want %v got %v", 7, r)
@@ -317,7 +313,7 @@ func TestRow(t *testing.T) {
 
 func TestColumn(t *testing.T) {
 	var matrix *Matrix
-	matrix, _ = New(7, 12, nil)
+	matrix = New(7, 12, nil)
 	c := matrix.Column()
 	if c != 12 {
 		t.Errorf("want %v got %v", 12, c)
@@ -327,7 +323,7 @@ func TestColumn(t *testing.T) {
 func TestAt(t *testing.T) {
 	var err error
 	var matrix *Matrix
-	matrix, _ = New(2, 3, nil)
+	matrix = New(2, 3, nil)
 	matrix.matrix = []float64{1, 2, 3, 4, 5, 6}
 	count := 0
 	for i := 1; i <= 2; i++ {
@@ -354,8 +350,8 @@ func TestSet(t *testing.T) {
 	var err error
 	var matrix *Matrix
 	var answer *Matrix
-	matrix, _ = New(2, 3, nil)
-	answer, _ = New(2, 3, nil)
+	matrix = New(2, 3, nil)
+	answer = New(2, 3, nil)
 	answer.matrix = []float64{1, 2, 3, 4, 5, 6}
 	count := 0
 	for i := 1; i <= 2; i++ {
@@ -380,34 +376,32 @@ func TestSet(t *testing.T) {
 }
 
 func TestSetMatrix(t *testing.T) {
-	var err error
 	var matrix *Matrix
 	var answer *Matrix
 	matrix = createUniformMatrix(2, 3, 4)
 	answer = createUniformMatrix(3, 5, 6)
-	err = matrix.SetMatrix(answer)
-	if err != nil {
-		t.Errorf("Should be error nil but got %v", err)
+	matrix.SetMatrix(answer)
+	if matrix.Err() != nil {
+		t.Errorf("Should be error nil but got %v", matrix.Err)
 	}
 	if !reflect.DeepEqual(answer, matrix) {
 		t.Errorf("want %#v got %#v", answer, matrix)
 	}
 	answer = &Matrix{-1, 2, []float64{}, nil}
-	err = matrix.SetMatrix(answer)
-	if err == nil {
+	matrix.SetMatrix(answer)
+	if matrix.Err() == nil {
 		t.Errorf("Should get error but got nil")
 	}
 }
 
 func TestReshape(t *testing.T) {
-	var err error
 	var matrix *Matrix
 	var answer *Matrix
-	matrix, _ = NewVector([]float64{1, 2, 3, 4, 5, 6})
+	matrix = NewVector([]float64{1, 2, 3, 4, 5, 6})
 	answer = &Matrix{2, 3, []float64{1, 2, 3, 4, 5, 6}, nil}
-	matrix, err = matrix.Reshape(2, 3)
-	if err != nil {
-		t.Errorf("Should be error nil but got %v", err)
+	matrix = matrix.Reshape(2, 3)
+	if matrix.Err() != nil {
+		t.Errorf("Should be error nil but got %v", matrix.Err())
 	}
 	if !reflect.DeepEqual(answer, matrix) {
 		t.Errorf("want %#v got %#v", answer, matrix)
@@ -415,17 +409,16 @@ func TestReshape(t *testing.T) {
 }
 
 func TestReshapeError(t *testing.T) {
-	var err error
 	var matrix *Matrix
-	matrix, _ = NewVector([]float64{1, 2, 3, 4, 5, 6})
-	matrix, err = matrix.Reshape(3, 3)
-	if err == nil {
+	matrix = NewVector([]float64{1, 2, 3, 4, 5, 6})
+	matrix = matrix.Reshape(3, 3)
+	if matrix.Err() == nil {
 		t.Errorf("Should get error but got nil")
 	}
 
-	matrix, _ = NewVector([]float64{1, 2, 3, 4, 5, 6})
-	matrix, err = matrix.Reshape(2, 2)
-	if err == nil {
+	matrix = NewVector([]float64{1, 2, 3, 4, 5, 6})
+	matrix = matrix.Reshape(2, 2)
+	if matrix.Err() == nil {
 		t.Errorf("Should get error but got nil")
 	}
 }
@@ -434,19 +427,18 @@ func TestSepRow(t *testing.T) {
 	var matrix *Matrix
 	var matrix2 *Matrix
 	var answer *Matrix
-	var err error
 	matrix = &Matrix{6, 3, []float64{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18}, nil}
 	answer = &Matrix{3, 3, []float64{4, 5, 6, 7, 8, 9, 10, 11, 12}, nil}
-	matrix2, err = matrix.SepRow(2, 4)
-	if err != nil {
-		t.Errorf("Should be error nil but got %v", err)
+	matrix2 = matrix.SepRow(2, 4)
+	if matrix2.Err() != nil {
+		t.Errorf("Should be error nil but got %v", matrix2.Err())
 	}
 	if !reflect.DeepEqual(answer, matrix2) {
 		t.Errorf("want %#v got %#v", answer, matrix2)
 	}
 
 	answer = matrix
-	matrix2, err = matrix.SepRow(1, 6)
+	matrix2 = matrix.SepRow(1, 6)
 	if !reflect.DeepEqual(answer, matrix2) {
 		t.Errorf("want %#v got %#v", answer, matrix2)
 	}
@@ -454,19 +446,18 @@ func TestSepRow(t *testing.T) {
 
 func TestSepRowError(t *testing.T) {
 	var matrix *Matrix
-	var err error
 	matrix = &Matrix{6, 3, []float64{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18}, nil}
-	_, err = matrix.SepRow(2, 1)
-	if err == nil {
+	matrix = matrix.SepRow(2, 1)
+	if matrix.Err() == nil {
 		t.Errorf("Should get error but got nil")
 	}
 
-	_, err = matrix.SepRow(0, 4)
-	if err == nil {
+	matrix = matrix.SepRow(0, 4)
+	if matrix.Err() == nil {
 		t.Errorf("Should get error but got nil")
 	}
-	_, err = matrix.SepRow(1, 7)
-	if err == nil {
+	matrix = matrix.SepRow(1, 7)
+	if matrix.Err() == nil {
 		t.Errorf("Should get error but got nil")
 	}
 }
@@ -478,8 +469,8 @@ func TestSepColumn(t *testing.T) {
 	var err error
 	matrix = &Matrix{3, 6, []float64{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18}, nil}
 	answer = &Matrix{3, 3, []float64{2, 3, 4, 8, 9, 10, 14, 15, 16}, nil}
-	matrix2, err = matrix.SepColumn(2, 4)
-	if err != nil {
+	matrix2 = matrix.SepColumn(2, 4)
+	if matrix2.Err() != nil {
 		t.Errorf("Should be error nil but got %v", err)
 	}
 	if !reflect.DeepEqual(answer, matrix2) {
@@ -487,7 +478,7 @@ func TestSepColumn(t *testing.T) {
 	}
 
 	answer = matrix
-	matrix2, err = matrix.SepColumn(1, 6)
+	matrix2 = matrix.SepColumn(1, 6)
 	if !reflect.DeepEqual(answer, matrix2) {
 		t.Errorf("want %#v got %#v", answer, matrix2)
 	}
@@ -495,19 +486,18 @@ func TestSepColumn(t *testing.T) {
 
 func TestSepColumnError(t *testing.T) {
 	var matrix *Matrix
-	var err error
 	matrix = &Matrix{3, 6, []float64{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18}, nil}
-	_, err = matrix.SepColumn(2, 1)
-	if err == nil {
+	matrix = matrix.SepColumn(2, 1)
+	if matrix.Err() == nil {
 		t.Errorf("Should get error but got nil")
 	}
 
-	_, err = matrix.SepColumn(0, 4)
-	if err == nil {
+	matrix = matrix.SepColumn(0, 4)
+	if matrix.Err() == nil {
 		t.Errorf("Should get error but got nil")
 	}
-	_, err = matrix.SepColumn(1, 7)
-	if err == nil {
+	matrix = matrix.SepColumn(1, 7)
+	if matrix.Err() == nil {
 		t.Errorf("Should get error but got nil")
 	}
 }

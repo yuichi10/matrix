@@ -32,7 +32,7 @@ func TestVector(t *testing.T) {
 func TestZeroMatrix(t *testing.T) {
 	var matrix *Matrix
 	var answer *Matrix
-	matrix, _ = New(2, 3, nil)
+	matrix = New(2, 3, nil)
 	matrix.matrix = []float64{1, 2, 3, 4, 5, 6}
 	answer = &Matrix{2, 3, []float64{0, 0, 0, 0, 0, 0}, nil}
 	matrix = matrix.ZeroMatrix()

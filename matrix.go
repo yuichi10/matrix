@@ -8,90 +8,85 @@ import (
 
 // Matrix has information of matrix
 type Matrix struct {
-	row     int       // 行
-	column  int       // 列
-	matrix  []float64 // 行 * 列の長さ
-	calcErr error
+	row    int       // 行
+	column int       // 列
+	matrix []float64 // 行 * 列の長さ
+	err    error
 }
 
-func newByFloatArray(row, column int, vector []float64) (matrix *Matrix, err error) {
-	matrix = new(Matrix)
-	matrix.row = row
-	matrix.column = column
+func (m *Matrix) newByFloatArray(vector []float64) {
 	if len(vector) == 0 {
-		matrix.matrix = make([]float64, matrix.row*matrix.column)
+		m.matrix = make([]float64, m.row*m.column)
 		return
 	}
 	vec := make([]float64, len(vector))
 	copy(vec, vector)
-	matrix.matrix = vec
-	if err = matrix.checkNormal(); err != nil {
+	m.matrix = vec
+	if err := m.checkNormal(); err != nil {
+		m.err = err
 		return
 	}
 	return
 }
 
-func newByFLoat64(row, column int, value float64) (matrix *Matrix) {
-	matrix = new(Matrix)
-	matrix.row = row
-	matrix.column = column
-	matrix.matrix = make([]float64, row*column)
-	for i := 0; i < row*column; i++ {
-		matrix.matrix[i] = value
+func (m *Matrix) newByFLoat64(value float64) {
+	m.matrix = make([]float64, m.row*m.column)
+	for i := 0; i < m.row*m.column; i++ {
+		m.matrix[i] = value
 	}
-	return
-}
-
-func newByNil(row, column int) (matrix *Matrix) {
-	matrix = new(Matrix)
-	matrix.row = row
-	matrix.column = column
-	matrix.matrix = make([]float64, row*column)
-	return
 }
 
 // New will return *Matrix
-func New(row, column int, value interface{}) (*Matrix, error) {
+func New(row, column int, value interface{}) (matrix *Matrix) {
+	matrix = new(Matrix)
+	matrix.row = row
+	matrix.column = column
 	if row <= 0 || column <= 0 {
-		err := errors.New("Length is not greater 0")
-		return new(Matrix), err
+		matrix.err = errors.New("Length is not greater 0")
+		return
 	}
 	if vector, ok := value.([]float64); ok {
-		return newByFloatArray(row, column, vector)
+		matrix.newByFloatArray(vector)
+		return
 	} else if num, ok := value.(int); ok {
-		return newByFLoat64(row, column, float64(num)), nil
+		matrix.newByFLoat64(float64(num))
+		return
 	} else if num, ok := value.(float64); ok {
-		return newByFLoat64(row, column, num), nil
+		matrix.newByFLoat64(num)
+		return
 	} else if value == nil {
-		return newByNil(row, column), nil
+		matrix.matrix = make([]float64, row*column)
+		return
 	}
-	return nil, errors.New("The argument type is not allowed")
+	matrix.err = errors.New("The argument type is not allowed")
+	return
 }
 
 // NewVector will create vector by array
-func NewVector(row []float64) (*Matrix, error) {
+func NewVector(row []float64) (matrix *Matrix) {
+	matrix = new(Matrix)
 	if len(row) <= 0 {
-		return nil, errors.New("The vector is broken")
+		matrix.err = errors.New("The vector is broken")
+		return
 	}
-	matrix := new(Matrix)
 	vector := make([]float64, len(row))
 	copy(vector, row)
 	matrix.row = len(row)
 	matrix.column = 1
 	matrix.matrix = vector
-	return matrix, nil
+	return
 }
 
-// CalcErr will return error of calcuration
-func (m *Matrix) CalcErr() error {
-	return m.calcErr
+// Err will return error of calcuration
+func (m *Matrix) Err() error {
+	return m.err
 }
 
 // Copy will copy matrix
 func Copy(mat *Matrix) *Matrix {
 	vector := make([]float64, len(mat.matrix))
 	copy(vector, mat.matrix)
-	matrix := &Matrix{mat.row, mat.column, vector, mat.calcErr}
+	matrix := &Matrix{mat.row, mat.column, vector, mat.err}
 	return matrix
 }
 
@@ -107,17 +102,17 @@ func (m *Matrix) addRowMatrix(mat Matrix) error {
 
 // AddRow add row at tail. if the len of column = 0. create new vector 1 * len(row)
 // []float64, Matrix, int and float64 are only allowed
-func (m *Matrix) AddRow(num interface{}) (matrix *Matrix, err error) {
+func (m *Matrix) AddRow(num interface{}) (matrix *Matrix) {
 	matrix = Copy(m)
 	if mat, ok := num.(Matrix); ok {
-		err = matrix.addRowMatrix(mat)
+		matrix.err = matrix.addRowMatrix(mat)
 		return
 	} else if mat, ok := num.(*Matrix); ok {
-		err = matrix.addRowMatrix(*mat)
+		matrix.err = matrix.addRowMatrix(*mat)
 		return
 	} else if row, ok := num.([]float64); ok {
 		if matrix.column != len(row) {
-			err = errors.New("Column length is not same")
+			matrix.err = errors.New("Column length is not same")
 			return
 		}
 		matrix.row++
@@ -140,7 +135,7 @@ func (m *Matrix) AddRow(num interface{}) (matrix *Matrix, err error) {
 		matrix.matrix = append(matrix.matrix, vector...)
 		return
 	}
-	err = errors.New("The argument type is not allowed")
+	matrix.err = errors.New("The argument type is not allowed")
 	return
 }
 
@@ -155,17 +150,17 @@ func (m *Matrix) addRowMatrixHEAD(mat Matrix) error {
 }
 
 // AddRowHEAD add row at head. if the len of column = 0 create new vector
-func (m *Matrix) AddRowHEAD(num interface{}) (matrix *Matrix, err error) {
+func (m *Matrix) AddRowHEAD(num interface{}) (matrix *Matrix) {
 	matrix = Copy(m)
 	if mat, ok := num.(Matrix); ok {
-		err = matrix.addRowMatrixHEAD(mat)
+		matrix.err = matrix.addRowMatrixHEAD(mat)
 		return
 	} else if mat, ok := num.(*Matrix); ok {
-		err = matrix.addRowMatrixHEAD(*mat)
+		matrix.err = matrix.addRowMatrixHEAD(*mat)
 		return
 	} else if row, ok := num.([]float64); ok {
 		if matrix.column != len(row) {
-			err = errors.New("Column length is not same")
+			matrix.err = errors.New("Column length is not same")
 			return
 		}
 		matrix.row++
@@ -188,7 +183,7 @@ func (m *Matrix) AddRowHEAD(num interface{}) (matrix *Matrix, err error) {
 		matrix.matrix = append(vector, matrix.matrix...)
 		return
 	}
-	err = errors.New("The argument type is not allowed")
+	matrix.err = errors.New("The argument type is not allowed")
 	return
 }
 
@@ -237,48 +232,56 @@ func (m *Matrix) Set(row, column int, value float64) error {
 }
 
 // SetMatrix will set mat to this matrix
-func (m *Matrix) SetMatrix(mat *Matrix) error {
+func (m *Matrix) SetMatrix(mat *Matrix) {
 	if err := mat.checkNormal(); err != nil {
-		return errors.New("The matrix is broken")
+		m.err = errors.New("The matrix is broken")
+		return
 	}
 	vector := make([]float64, len(mat.matrix))
 	copy(vector, mat.matrix)
 	m.row = mat.row
 	m.column = mat.column
 	m.matrix = vector
-	return nil
+	return
 }
 
 // Reshape will change vect
-func (m *Matrix) Reshape(row, column int) (*Matrix, error) {
-	matrix := Copy(m)
+func (m *Matrix) Reshape(row, column int) (matrix *Matrix) {
+	matrix = Copy(m)
 	matrix.row = row
 	matrix.column = column
 	if err := matrix.checkNormal(); err != nil {
-		return nil, err
+		matrix.err = err
+		return
 	}
-	return matrix, nil
+	return
 }
 
 // SepRow will return matrix which separate by row numbers
-func (m *Matrix) SepRow(start, end int) (*Matrix, error) {
+func (m *Matrix) SepRow(start, end int) (matrix *Matrix) {
+	matrix = Copy(m)
 	if end < start {
-		return nil, errors.New("The argument values are invalid")
+		matrix.err = errors.New("The argument values are invalid")
+		return
 	} else if end > m.row || start < 1 {
-		return nil, errors.New("The value are out of matrix")
+		matrix.err = errors.New("The value are out of matrix")
+		return
 	}
 	s := (start - 1) * m.column
 	e := (end - 1) * m.column
-	matrix, err := New(end-start+1, m.column, m.matrix[s:e+m.column])
-	return matrix, err
+	matrix = New(end-start+1, m.column, m.matrix[s:e+m.column])
+	return
 }
 
 // SepColumn will return matrix which separate by sep numbers
-func (m *Matrix) SepColumn(start, end int) (*Matrix, error) {
+func (m *Matrix) SepColumn(start, end int) (matrix *Matrix) {
+	matrix = Copy(m)
 	if end < start {
-		return nil, errors.New("The argument values are invalid")
+		matrix.err = errors.New("The argument values are invalid")
+		return
 	} else if end > m.column || start < 1 {
-		return nil, errors.New("The value are out of matrix")
+		matrix.err = errors.New("The value are out of matrix")
+		return
 	}
 	vector := make([]float64, (end-start+1)*m.row)
 	count := 0
@@ -288,5 +291,6 @@ func (m *Matrix) SepColumn(start, end int) (*Matrix, error) {
 			count++
 		}
 	}
-	return New(m.row, end-start+1, vector)
+	matrix = New(m.row, end-start+1, vector)
+	return
 }
