@@ -14,25 +14,69 @@ type Matrix struct {
 	calcErr error
 }
 
-// New will return *Matrix
-func New(row, column int, vector []float64) (*Matrix, error) {
-	matrix := new(Matrix)
-	if row <= 0 || column <= 0 {
-		return nil, errors.New("Length is not greater 0")
-	}
+func newByFloatArray(row, column int, vector []float64) (matrix *Matrix, err error) {
+	matrix = new(Matrix)
 	matrix.row = row
 	matrix.column = column
-	if len(vector) == 0 || vector == nil {
+	if len(vector) == 0 {
 		matrix.matrix = make([]float64, matrix.row*matrix.column)
-		return matrix, nil
+		return
 	}
 	vec := make([]float64, len(vector))
 	copy(vec, vector)
 	matrix.matrix = vec
-	if err := matrix.checkNormal(); err != nil {
-		return nil, err
+	if err = matrix.checkNormal(); err != nil {
+		return
 	}
-	return matrix, nil
+	return
+}
+
+func newByInt(row, column int, value int) (matrix *Matrix) {
+	matrix = new(Matrix)
+	matrix.row = row
+	matrix.column = column
+	matrix.matrix = make([]float64, row*column)
+	for i := 0; i < row*column; i++ {
+		matrix.matrix[i] = float64(value)
+	}
+	return
+}
+
+func newByFLoat64(row, column int, value float64) (matrix *Matrix) {
+	matrix = new(Matrix)
+	matrix.row = row
+	matrix.column = column
+	matrix.matrix = make([]float64, row*column)
+	for i := 0; i < row*column; i++ {
+		matrix.matrix[i] = value
+	}
+	return
+}
+
+func newByNil(row, column int) (matrix *Matrix) {
+	matrix = new(Matrix)
+	matrix.row = row
+	matrix.column = column
+	matrix.matrix = make([]float64, row*column)
+	return
+}
+
+// New will return *Matrix
+func New(row, column int, value interface{}) (*Matrix, error) {
+	if row <= 0 || column <= 0 {
+		err := errors.New("Length is not greater 0")
+		return new(Matrix), err
+	}
+	if vector, ok := value.([]float64); ok {
+		return newByFloatArray(row, column, vector)
+	} else if num, ok := value.(int); ok {
+		return newByInt(row, column, num), nil
+	} else if num, ok := value.(float64); ok {
+		return newByFLoat64(row, column, num), nil
+	} else if value == nil {
+		return newByNil(row, column), nil
+	}
+	return nil, errors.New("The argument type is not allowed")
 }
 
 // NewVector will create vector by array

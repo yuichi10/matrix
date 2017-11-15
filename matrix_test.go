@@ -27,6 +27,33 @@ func TestNew(t *testing.T) {
 	if !reflect.DeepEqual(answer, matrix) {
 		t.Errorf("want %#v got %#v", answer, matrix)
 	}
+
+	matrix, err = New(2, 3, []float64{})
+	answer = &Matrix{2, 3, []float64{0, 0, 0, 0, 0, 0}, nil}
+	if err != nil {
+		t.Errorf("Should be error nil but got %v", err)
+	}
+	if !reflect.DeepEqual(answer, matrix) {
+		t.Errorf("want %#v got %#v", answer, matrix)
+	}
+
+	matrix, err = New(2, 3, 7)
+	answer = &Matrix{2, 3, []float64{7, 7, 7, 7, 7, 7}, nil}
+	if err != nil {
+		t.Errorf("Should be error nil but got %v", err)
+	}
+	if !reflect.DeepEqual(answer, matrix) {
+		t.Errorf("want %#v got %#v", answer, matrix)
+	}
+
+	matrix, err = New(2, 3, 7.7)
+	answer = &Matrix{2, 3, []float64{7.7, 7.7, 7.7, 7.7, 7.7, 7.7}, nil}
+	if err != nil {
+		t.Errorf("Should be error nil but got %v", err)
+	}
+	if !reflect.DeepEqual(answer, matrix) {
+		t.Errorf("want %#v got %#v", answer, matrix)
+	}
 }
 
 func TestNewError(t *testing.T) {
@@ -56,6 +83,11 @@ func TestNewError(t *testing.T) {
 	}
 
 	_, err = New(2, 3, []float64{1, 2, 3, 4, 5})
+	if err == nil {
+		t.Errorf("Should get error but got nil")
+	}
+
+	_, err = New(2, 3, "not allowed argument")
 	if err == nil {
 		t.Errorf("Should get error but got nil")
 	}
