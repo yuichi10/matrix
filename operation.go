@@ -44,3 +44,9 @@ func (m *Matrix) Sigmoid() (matrix *Matrix) {
 	}
 	return
 }
+
+// SigmoidGradient will return sigmoid gradient
+func (m *Matrix) SigmoidGradient() (matrix *Matrix) {
+	matrix = Copy(m)
+	return matrix.Sigmoid().MultiEach(matrix.Sigmoid().MultiEach(-1).Add(1))
+}

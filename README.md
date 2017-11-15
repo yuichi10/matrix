@@ -161,8 +161,8 @@ matrix, err = matrix.Reshape(2, 3)
 
 ### Substitution B to A
 ```golang
-A := matrix.New(2, 3, []float64{1, 2, 3, 4, 5, 6})
-B := matrix.New(2, 2, []float64{1, 2, 3, 4})
+A, _ := matrix.New(2, 3, []float64{1, 2, 3, 4, 5, 6})
+B, _ := matrix.New(2, 2, []float64{1, 2, 3, 4})
 A.SetMatrix(B)
 // then A will be
 // 1 2
@@ -171,7 +171,7 @@ A.SetMatrix(B)
 
 ### Transpose matrix
 ```golang
-matrix := matrix.New(2, 3, []float64{1, 2, 3, 4, 5, 6})
+matrix, _:= matrix.New(2, 3, []float64{1, 2, 3, 4, 5, 6})
 matrix = matrix.Transpose()
 // then matrix will be
 // 1 4
@@ -227,13 +227,13 @@ If you want to check calculation error, you can call **CalcErr()** mthod of matr
 
 ### Add
 ```golang
-matrix := matrix.New(2, 3, []float64{1, 2, 3, 4, 5, 6})
+matrix, _ := matrix.New(2, 3, []float64{1, 2, 3, 4, 5, 6})
 matrix = matrix.Add(2)
 // then matrix will be
 // 3 4 5
 // 6 7 8
 
-matrix2 := matrix.New(2, 3, []float64{1, 2, 3, 4, 5, 6})
+matrix2, _ := matrix.New(2, 3, []float64{1, 2, 3, 4, 5, 6})
 matrix = matrix.Add(matrix2)
 // then matrix will be
 // 2 4 6
@@ -241,13 +241,13 @@ matrix = matrix.Add(matrix2)
 ```
 ### Sub
 ```golang
-matrix := matrix.New(2, 3, []float64{1, 2, 3, 4, 5, 6})
+matrix, _ := matrix.New(2, 3, []float64{1, 2, 3, 4, 5, 6})
 matrix = matrix.Sub(2)
 // then matrix will be
 // -1 0 1
 // 2 3 4
 
-matrix2 := matrix.New(2, 3, []float64{1, 2, 3, 4, 5, 6})
+matrix2, _ := matrix.New(2, 3, []float64{1, 2, 3, 4, 5, 6})
 matrix = matrix.Sub(matrix2)
 // then matrix will be
 // 0 0 0
@@ -255,15 +255,15 @@ matrix = matrix.Sub(matrix2)
 ```
 ### Multi
 ```golang
-matrix := matrix.New(2, 3, []float64{1, 2, 3, 4, 5, 6})
+matrix, _ := matrix.New(2, 3, []float64{1, 2, 3, 4, 5, 6})
 matrix = matrix.Multi(2)
 // then matrix will be
 // it do the same move to Multi Each
 // 2 4 6
 // 8 10 12
 
-matrix = matrix.New(2, 3, []float64{1, 2, 3, 4, 5, 6})
-matrix2 = matrix.New(3, 1, []float64{1, 2, 3})
+matrix, _ = matrix.New(2, 3, []float64{1, 2, 3, 4, 5, 6})
+matrix2, _ = matrix.New(3, 1, []float64{1, 2, 3})
 matrix = matrix.Multi(matrix2)
 // if you Multi matrix your matrix will be
 // 14
@@ -271,15 +271,15 @@ matrix = matrix.Multi(matrix2)
 ```
 ### Multi Each
 ```golang
-matrix := matrix.New(2, 3, []float64{1, 2, 3, 4, 5, 6})
+matrix, _ := matrix.New(2, 3, []float64{1, 2, 3, 4, 5, 6})
 matrix = matrix.MultiEach(2)
 // then matrix will be
 // it do the same move to Multi Each
 // 2 4 6
 // 8 10 12
 
-matrix = matrix.New(2, 3, []float64{1, 2, 3, 4, 5, 6})
-matrix2 = matrix.New(3, 1, []float64{1, 2, 3, 4, 5, 6})
+matrix, _ = matrix.New(2, 3, []float64{1, 2, 3, 4, 5, 6})
+matrix2, _ = matrix.New(3, 1, []float64{1, 2, 3, 4, 5, 6})
 matrix = matrix.MultiEach(matrix2)
 // if you Multi matrix your matrix will be
 // 1 4 9
@@ -290,14 +290,14 @@ matrix = matrix.MultiEach(matrix2)
 if you divin by 0 you will get Inf.
 
 ```golang
-matrix := matrix.New(2, 3, []float64{1, 2, 3, 4, 5, 6})
+matrix, _ := matrix.New(2, 3, []float64{1, 2, 3, 4, 5, 6})
 matrix = matrix.Div(0.1)
 // then matrix will be 
 // 10 20 30
 // 40 50 60
 
-matrix = matrix.New(2, 3, []float64{1, 2, 3, 4, 5, 6})
-matrix2 = matrix.New(2, 3, []float64{1, 2, 3, 4, 5, 6})
+matrix, _ = matrix.New(2, 3, []float64{1, 2, 3, 4, 5, 6})
+matrix2, _ = matrix.New(2, 3, []float64{1, 2, 3, 4, 5, 6})
 // then matrix will be 
 // 1 1 1
 // 1 1 1
@@ -305,10 +305,20 @@ matrix2 = matrix.New(2, 3, []float64{1, 2, 3, 4, 5, 6})
 
 ### Sigmoid
 ```golang
-matrix := matrix.New{3, 4, []float64{1, 2, 3, 4, 5, 6, -1, -2, -3}}
+matrix, _ := matrix.New{3, 4, []float64{1, 2, 3, 4, 5, 6, -1, -2, -3}}
 matrix = matrix.Sigmoid()
 // then you will get (almost)
 // 0.731059   0.880797   0.952574
 // 0.982014   0.993307   0.997527
 // 0.268941   0.119203   0.047426
+```
+
+### Sigmoid Gradient
+```golang
+matrix, _ := New{3, 3, []float64{1, 2, 3, 4, 5, 6, -1, -2, -3}, nil}
+matrix = matrix.SigmoidGradient()
+// then you will get (almost)
+// 0.1966119   0.1049936   0.0451767
+// 0.0176627   0.0066481   0.0024665
+// 0.1966119   0.1049936   0.0451767
 ```
