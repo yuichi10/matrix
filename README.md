@@ -286,6 +286,23 @@ matrix = matrix.MultiEach(matrix2)
 // 12 25 36
 ```
 
+### Div 
+if you divin by 0 you will get Inf.
+
+```golang
+matrix := matrix.New(2, 3, []float64{1, 2, 3, 4, 5, 6})
+matrix = matrix.Div(0.1)
+// then matrix will be 
+// 10 20 30
+// 40 50 60
+
+matrix = matrix.New(2, 3, []float64{1, 2, 3, 4, 5, 6})
+matrix2 = matrix.New(2, 3, []float64{1, 2, 3, 4, 5, 6})
+// then matrix will be 
+// 1 1 1
+// 1 1 1
+```
+
 ### Sigmoid
 ```golang
 matrix := matrix.New{3, 4, []float64{1, 2, 3, 4, 5, 6, -1, -2, -3}}

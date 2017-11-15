@@ -372,6 +372,101 @@ func TestMultiEachError(t *testing.T) {
 	}
 }
 
+func TestDiv(t *testing.T) {
+	var matrix *Matrix
+	var matrix2 *Matrix
+	var answer *Matrix
+	matrix, _ = New(2, 4, []float64{1, 2, 3, 4, 5, 6, 7, 8})
+	matrix2, _ = New(2, 4, []float64{1, 2, 3, 4, 5, 6, 7, 8})
+	matrix = matrix.Div(matrix2)
+	answer = &Matrix{2, 4, []float64{1, 1, 1, 1, 1, 1, 1, 1}, nil}
+	if matrix.CalcErr() != nil {
+		t.Errorf("Matrix should be success but got error")
+	}
+	if !reflect.DeepEqual(answer, matrix) {
+		t.Errorf("want %#v got %#v", answer, matrix)
+	}
+
+	matrix, _ = New(2, 4, []float64{1, 2, 3, 4, 5, 6, 7, 8})
+	matrix2, _ = New(2, 4, []float64{0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8})
+	matrix = matrix.Div(*matrix2)
+	answer = &Matrix{2, 4, []float64{10, 10, 10, 10, 10, 10, 10, 10}, nil}
+	if matrix.CalcErr() != nil {
+		t.Errorf("Matrix should be success but got error")
+	}
+	if !reflect.DeepEqual(answer, matrix) {
+		t.Errorf("want %#v got %#v", answer, matrix)
+	}
+
+	matrix, _ = New(2, 4, []float64{1, 2, 3, 4, 5, 6, 7, 8})
+	matrix = matrix.Div(2)
+	answer = &Matrix{2, 4, []float64{0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4}, nil}
+	if matrix.CalcErr() != nil {
+		t.Errorf("Matrix should be success but got error")
+	}
+	if !reflect.DeepEqual(answer, matrix) {
+		t.Errorf("want %#v got %#v", answer, matrix)
+	}
+
+	matrix, _ = New(2, 4, []float64{1, 2, 3, 4, 5, 6, 7, 8})
+	matrix = matrix.Div(0.1)
+	answer = &Matrix{2, 4, []float64{10, 20, 30, 40, 50, 60, 70, 80}, nil}
+	if matrix.CalcErr() != nil {
+		t.Errorf("Matrix should be success but got error")
+	}
+	if !reflect.DeepEqual(answer, matrix) {
+		t.Errorf("want %#v got %#v", answer, matrix)
+	}
+}
+
+func TestDivError(t *testing.T) {
+	var matrix *Matrix
+	var matrix2 *Matrix
+	matrix, _ = New(2, 4, 2)
+	matrix2, _ = New(2, 3, 3)
+	matrix = matrix.Div(matrix2)
+	if matrix.CalcErr() == nil {
+		t.Errorf("opt1's colmn and opt2's row is different therefore should get error but got success")
+	}
+
+	matrix, _ = New(2, 4, 2)
+	matrix2, _ = New(2, 3, 3)
+	matrix = matrix.Div(*matrix2)
+	if matrix.CalcErr() == nil {
+		t.Errorf("opt1's colmn and opt2's row is different therefore should get error but got success")
+	}
+
+	matrix, _ = New(2, 4, 2)
+	matrix = matrix.Div("string is not allowd")
+	if matrix.CalcErr() == nil {
+		t.Errorf("opt2 is not allowed type therefore should get error but got success")
+	}
+
+	matrix, _ = New(4, 3, 0)
+	matrix2, _ = New(5, 3, 1)
+	matrix2.calcErr = errors.New("error")
+	matrix = matrix.Div(matrix2)
+	if matrix.CalcErr() == nil {
+		t.Errorf("opt2 is error thus should get error got nil")
+	}
+
+	matrix, _ = New(4, 3, 0)
+	matrix2, _ = New(5, 3, 1)
+	matrix2.calcErr = errors.New("error")
+	matrix = matrix.Div(*matrix2)
+	if matrix.CalcErr() == nil {
+		t.Errorf("opt2 is error thus should get error got nil")
+	}
+
+	matrix, _ = New(4, 3, 0)
+	matrix2, _ = New(5, 3, 1)
+	matrix.calcErr = errors.New("error")
+	matrix = matrix.Div(matrix2)
+	if matrix.CalcErr() == nil {
+		t.Errorf("opt1 is error thus should get error got nil")
+	}
+}
+
 func setup() {}
 
 func teardown() {}

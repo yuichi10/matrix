@@ -103,6 +103,16 @@ func (m *Matrix) multiEachByMatrix(mat Matrix) error {
 	return nil
 }
 
+func (m *Matrix) divByMatrix(mat Matrix) error {
+	if err := m.checkSameSize(mat); err != nil {
+		return err
+	}
+	for i, val := range mat.matrix {
+		m.matrix[i] /= val
+	}
+	return nil
+}
+
 func (m *Matrix) subByFloat(num float64) {
 	for i := range m.matrix {
 		m.matrix[i] -= num
@@ -118,6 +128,12 @@ func (m *Matrix) addByFloat(num float64) {
 func (m *Matrix) multiByFloat(num float64) {
 	for i := range m.matrix {
 		m.matrix[i] *= num
+	}
+}
+
+func (m *Matrix) divByFloat(num float64) {
+	for i := range m.matrix {
+		m.matrix[i] /= num
 	}
 }
 
@@ -268,4 +284,38 @@ func (m *Matrix) MultiEach(num interface{}) (matrix *Matrix) {
 	return
 }
 
-// Sep
+// Div will divine matrix
+func (m *Matrix) Div(num interface{}) (matrix *Matrix) {
+	var err error
+	matrix = Copy(m)
+	if m.CalcErr() != nil {
+		return
+	}
+	if mat, ok := num.(Matrix); ok {
+		if mat.CalcErr() != nil {
+			matrix.calcErr = mat.calcErr
+			return
+		}
+		if err = matrix.divByMatrix(mat); err != nil {
+			matrix.calcErr = &MatrixError{msg: err.Error(), funcName: "Div"}
+		}
+		return
+	} else if mat, ok := num.(*Matrix); ok {
+		if mat.CalcErr() != nil {
+			matrix.calcErr = mat.calcErr
+			return
+		}
+		if err = matrix.divByMatrix(*mat); err != nil {
+			matrix.calcErr = &MatrixError{msg: err.Error(), funcName: "Div"}
+		}
+		return
+	} else if mat, ok := num.(float64); ok {
+		matrix.divByFloat(float64(mat))
+		return
+	} else if mat, ok := num.(int); ok {
+		matrix.divByFloat(float64(mat))
+		return
+	}
+	matrix.calcErr = &MatrixError{msg: "The op2 type is not allowed", funcName: "Div"}
+	return
+}

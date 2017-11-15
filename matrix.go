@@ -31,17 +31,6 @@ func newByFloatArray(row, column int, vector []float64) (matrix *Matrix, err err
 	return
 }
 
-func newByInt(row, column int, value int) (matrix *Matrix) {
-	matrix = new(Matrix)
-	matrix.row = row
-	matrix.column = column
-	matrix.matrix = make([]float64, row*column)
-	for i := 0; i < row*column; i++ {
-		matrix.matrix[i] = float64(value)
-	}
-	return
-}
-
 func newByFLoat64(row, column int, value float64) (matrix *Matrix) {
 	matrix = new(Matrix)
 	matrix.row = row
@@ -70,7 +59,7 @@ func New(row, column int, value interface{}) (*Matrix, error) {
 	if vector, ok := value.([]float64); ok {
 		return newByFloatArray(row, column, vector)
 	} else if num, ok := value.(int); ok {
-		return newByInt(row, column, num), nil
+		return newByFLoat64(row, column, float64(num)), nil
 	} else if num, ok := value.(float64); ok {
 		return newByFLoat64(row, column, num), nil
 	} else if value == nil {
