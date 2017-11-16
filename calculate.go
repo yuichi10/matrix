@@ -224,7 +224,8 @@ func (m *Matrix) Multi(num interface{}) (matrix *Matrix) {
 			matrix.err = mat.err
 			return
 		}
-		if err = matrix.multiByMatrixParallel(mat); err != nil {
+		// if err = matrix.multiByMatrixParallel(mat); err != nil {
+		if err = matrix.multiByMatrix(mat); err != nil {
 			matrix.err = &MatrixError{msg: err.Error(), funcName: "Multi"}
 		}
 		return
@@ -233,7 +234,8 @@ func (m *Matrix) Multi(num interface{}) (matrix *Matrix) {
 			matrix.err = mat.err
 			return
 		}
-		if err = matrix.multiByMatrixParallel(*mat); err != nil {
+		// if err = matrix.multiByMatrixParallel(*mat); err != nil {
+		if err = matrix.multiByMatrix(*mat); err != nil {
 			matrix.err = &MatrixError{msg: err.Error(), funcName: "Multi"}
 		}
 		return
