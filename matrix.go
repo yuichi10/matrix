@@ -1,9 +1,14 @@
 package matrix
 
 import (
+	crand "crypto/rand"
+	"encoding/binary"
 	"errors"
 	"fmt"
+	"math"
+	"math/rand"
 	"strings"
+	"time"
 )
 
 // Matrix has information of matrix
@@ -74,6 +79,28 @@ func NewVector(row []float64) (matrix *Matrix) {
 	matrix.row = len(row)
 	matrix.column = 1
 	matrix.matrix = vector
+	return
+}
+
+// NewRandom will return matrix which values are 0~1
+func NewRandom(row, column int, digits uint8) (matrix *Matrix) {
+	matrix = new(Matrix)
+	if row <= 0 || column <= 0 {
+		matrix.err = errors.New("Length is not greater 0")
+		return
+	}
+	matrix.row = row
+	matrix.column = column
+	matrix.matrix = make([]float64, row*column)
+	d := math.Pow10(int(digits))
+	var s int64
+	if err := binary.Read(crand.Reader, binary.LittleEndian, &s); err != nil {
+		s = time.Now().UnixNano()
+	}
+	rand.Seed(s)
+	for i := 0; i < row*column; i++ {
+		matrix.matrix[i] = float64(rand.Intn(int(d))) / d
+	}
 	return
 }
 

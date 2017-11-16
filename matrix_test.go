@@ -97,12 +97,11 @@ func TestNewVector(t *testing.T) {
 	var matrix *Matrix
 	var answer *Matrix
 	var vector []float64
-	var err error
 	vector = []float64{1, 2, 3}
 	answer = &Matrix{3, 1, []float64{1, 2, 3}, nil}
 	matrix = NewVector(vector)
 	if matrix.Err() != nil {
-		t.Errorf("Should be error nil but got %v", err)
+		t.Errorf("Should be error nil but got %v", matrix.Err())
 	}
 	if !reflect.DeepEqual(answer, matrix) {
 		t.Errorf("want %#v got %#v", answer, matrix)
@@ -116,6 +115,30 @@ func TestNewVector(t *testing.T) {
 	matrix = NewVector([]float64{})
 	if matrix.Err() == nil {
 		t.Errorf("Should get error but got nil")
+	}
+}
+
+func TestNewRandom(t *testing.T) {
+	var matrix *Matrix
+	matrix = NewRandom(3, 4, 5)
+	if matrix.Err() != nil {
+		t.Errorf("Should be error nil but got %v", matrix.Err())
+	}
+	for i := 1; i <= 3; i++ {
+		for j := 1; j <= 4; j++ {
+			val, _ := matrix.At(i, j)
+			if val > 1 || val < 0 {
+				t.Errorf("should be 0~1")
+			}
+		}
+	}
+}
+
+func TestNewRandomError(t *testing.T) {
+	var matrix *Matrix
+	matrix = NewRandom(0, 2, 2)
+	if matrix.Err() == nil {
+		t.Errorf("You should get error but got nil")
 	}
 }
 

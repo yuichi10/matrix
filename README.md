@@ -61,6 +61,15 @@ matrix := matrix.NewVector([]float64{1, 2, 3})
 // 3
 ```
 
+### Create Random Matrix
+```golang
+matrix := matrix.NewRandom(2, 4, 3)
+// the third argument mean number of decimal places.
+// you will get(about)
+// 0.123 0.234 0.345 0.124
+// 0.646 0.683 0.573 0.198
+```
+
 ### Copy your matrix
 ```golang 
 matrix := matrix.New(2, 3, []float64{1, 2, 3, 4, 5, 6})
