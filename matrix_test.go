@@ -142,6 +142,32 @@ func TestNewRandomError(t *testing.T) {
 	}
 }
 
+func TestNewHotVector(t *testing.T) {
+	var matrix *Matrix
+	var answer *Matrix
+	matrix = NewHotVector(5, 3)
+	answer = NewVector([]float64{0, 0, 1, 0, 0})
+	if matrix.Err() != nil {
+		t.Errorf("Should be error nil but got %v", matrix.Err())
+	}
+	if !reflect.DeepEqual(answer, matrix) {
+		t.Errorf("want %#v got %#v", answer, matrix)
+	}
+}
+
+func TestNewHotVectorError(t *testing.T) {
+	var matrix *Matrix
+	matrix = NewHotVector(3, 0)
+	if matrix.Err() == nil {
+		t.Errorf("You should get error but got nil")
+	}
+
+	matrix = NewHotVector(3, 4)
+	if matrix.Err() == nil {
+		t.Errorf("You should get error but got nil")
+	}
+}
+
 func TestErr(t *testing.T) {
 	var matrix *Matrix
 	matrix = New(1, 2, nil)

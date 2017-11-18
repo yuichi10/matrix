@@ -61,6 +61,17 @@ matrix := matrix.NewVector([]float64{1, 2, 3})
 // 3
 ```
 
+### Create Hot Vector
+```golang
+matrix := NewHotVector(5, 3)
+// then you will get
+// 0
+// 0
+// 1
+// 0
+// 0
+```
+
 ### Create Random Matrix
 ```golang
 matrix := matrix.NewRandom(2, 4, 3)

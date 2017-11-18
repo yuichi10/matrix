@@ -467,6 +467,20 @@ func TestDivError(t *testing.T) {
 	}
 }
 
+func benchMulti(b *testing.B, size, count int) {
+	matrix := NewRandom(size, size, 3).MultiEach(100)
+	b.ReportAllocs()
+	for i := 0; i < count; i++ {
+		matrix.Multi(matrix)
+	}
+}
+
+// func BenchmarkMulti50_500(b *testing.B)      { benchMulti(b, 50, 50) }
+func BenchmarkMulti50000_500(b *testing.B) { benchMulti(b, 1000, 1) }
+
+// func BenchmarkMulti500_50000(b *testing.B)   { benchMulti(b, 50, 5000) }
+// func BenchmarkMulti50000_50000(b *testing.B) { benchMulti(b, 5000, 5000) }
+
 func setup() {}
 
 func teardown() {}

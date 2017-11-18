@@ -104,6 +104,23 @@ func NewRandom(row, column int, digits uint8) (matrix *Matrix) {
 	return
 }
 
+// NewHotVector will return hot vector
+func NewHotVector(size, place int) (matrix *Matrix) {
+	matrix = new(Matrix)
+	if size <= 0 || place <= 0 {
+		matrix.err = errors.New("The size and place must be > 0")
+		return
+	} else if place > size {
+		matrix.err = errors.New("place must be less or equal than size")
+		return
+	}
+	matrix.row = size
+	matrix.column = 1
+	matrix.matrix = make([]float64, size)
+	matrix.matrix[place-1] = 1
+	return
+}
+
 // Err will return error of calcuration
 func (m *Matrix) Err() error {
 	return m.err
