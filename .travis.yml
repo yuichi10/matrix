@@ -2,4 +2,5 @@ language: go
   - 1.9.2
 install: true
 script:
+  - ls /home/travis/.gimme/versions/go1.7.4.linux.amd64/src/github.com/yuichi10/matrix/
   - go test
