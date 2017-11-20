@@ -3,5 +3,5 @@ language: go
 install: true
 go_import_path: github.com/yuichi10/matrix
 script:
-  - go get -t ./...
+  - dep ensure
   - go test
