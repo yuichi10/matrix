@@ -3,5 +3,6 @@ language: go
 go_import_path: github.com/yuichi10/matrix
 before_install:
   - go get -v github.com/golang/lint/golint
+  - go get -v github.com/yuichi10/matrix
 script:
   - go test
