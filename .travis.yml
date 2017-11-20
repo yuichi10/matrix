@@ -1,7 +1,8 @@
 language: go
   - 1.9.2
-install: true
 go_import_path: github.com/yuichi10/matrix
+install: 
+  - go get -t ./...
 script:
   - dep ensure
   - go test
