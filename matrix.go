@@ -4,6 +4,8 @@ import (
 	"errors"
 	"fmt"
 	"strings"
+
+	"github.com/yuichi10/matrix/config"
 )
 
 // Matrix has information of matrix
@@ -12,6 +14,16 @@ type Matrix struct {
 	column int       // 列
 	matrix []float64 // 行 * 列の長さ
 	err    error
+}
+
+var (
+	// Config has configure of this matrix library
+	Config *config.Config
+)
+
+func init() {
+	Config = new(config.Config)
+	Config.Panic = false
 }
 
 // Row return this matrix's row
