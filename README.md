@@ -10,31 +10,31 @@ thus if you finish bach of calculate please check matrix.Err()
 
 # Example
 ```golang
-matrix := matrix.New(4, 5, nil)
+matrix := New(4, 5, nil)
 // it will make 4 * 5 matrix and all value initialized by 0
 
 
-matrix = matrix.New(2, 3, []float64{1, 2, 3, 4, 5, 6})
+matrix = New(2, 3, []float64{1, 2, 3, 4, 5, 6})
 // it will make 2 * 3 matrix 
 // it looks like
 // 1 2 3
 // 4 5 6
 
-matrix2 := matrix.New(2, 3, []float64{1, 2, 3, 4, 5, 6})
+matrix2 := New(2, 3, []float64{1, 2, 3, 4, 5, 6})
 matrix = matrix.Add(matrix2)
 // if you add matrix2 you will make matrix
 // 2 4 6
 // 8 10 12
 
-matrix = matrix.New(2, 3, []float64{1, 2, 3, 4, 5, 6})
-matrix2 = matrix.New(3, 1, []float64{1, 2, 3})
+matrix = New(2, 3, []float64{1, 2, 3, 4, 5, 6})
+matrix2 = New(3, 1, []float64{1, 2, 3})
 matrix = matrix.Multi(matrix2)
 // if you Multi matrix your matrix will be
 // 14
 // 32
 
-matrix = matrix.New(2, 3, []float64{1, 2, 3, 4, 5, 6})
-matrix2 = matrix.New(1, 2, []float64{1, 2})
+matrix = New(2, 3, []float64{1, 2, 3, 4, 5, 6})
+matrix2 = New(1, 2, []float64{1, 2})
 matrix = matrix.Multi(matrix2)
 matrix.Err()
 // it will show you that err happen
@@ -43,10 +43,10 @@ matrix.Err()
 ### Create Matrix
 ```golang
 
-matrix := matrix.New(4, 5, nil)
+matrix := New(4, 5, nil)
 // it will make 4 * 5 matrix and all value initialized by 0
 
-matrix := matrix.New(2, 3, []float64{1, 2, 3, 4, 5, 6})
+matrix := New(2, 3, []float64{1, 2, 3, 4, 5, 6})
 // it will make 2 * 3 matrix 
 // it looks like
 // 1 2 3
@@ -54,7 +54,7 @@ matrix := matrix.New(2, 3, []float64{1, 2, 3, 4, 5, 6})
 ```
 ### Create Vector
 ```golang
-matrix := matrix.NewVector([]float64{1, 2, 3})
+matrix := NewVector([]float64{1, 2, 3})
 // if you use NewVecotr you will get 
 // 1
 // 2
@@ -74,7 +74,7 @@ matrix := NewHotVector(5, 3)
 
 ### Create Random Matrix
 ```golang
-matrix := matrix.NewRandom(2, 4, 3)
+matrix := NewRandom(2, 4, 3)
 // the third argument mean number of decimal places.
 // you will get(about)
 // 0.123 0.234 0.345 0.124
@@ -83,7 +83,7 @@ matrix := matrix.NewRandom(2, 4, 3)
 
 ## Create Eye Matrix
 ```golang
-matrix := matrix.NewEye(3)
+matrix := NewEye(3)
 // then you will get
 // 1 0 0
 // 0 1 0
@@ -92,7 +92,7 @@ matrix := matrix.NewEye(3)
 
 ### Copy your matrix
 ```golang 
-matrix := matrix.New(2, 3, []float64{1, 2, 3, 4, 5, 6})
+matrix := New(2, 3, []float64{1, 2, 3, 4, 5, 6})
 matrix2 := matrix.Copy(matrix)
 // if you copy matrix then matrix2 got
 // 1 2 3
@@ -101,7 +101,7 @@ matrix2 := matrix.Copy(matrix)
 
 ### Add row
 ```golang
-matrix := matrix.New(2, 3, []float64{1, 2, 3, 4, 5, 6})
+matrix := New(2, 3, []float64{1, 2, 3, 4, 5, 6})
 matrix = matrix.AddRow([]float64{7, 8, 9})
 // if you want to add row then you can use AddRow
 // if you use AddRow then matrix will be 
@@ -109,8 +109,8 @@ matrix = matrix.AddRow([]float64{7, 8, 9})
 // 4 5 6
 // 7 8 9
 
-matrix = matrix.New(2, 3, []float64{1, 2, 3, 4, 5, 6})
-matrix2 = matrix.New{3, 3, []float64{7, 8, 9, 10, 11, 12, 13, 14, 15}}
+matrix = New(2, 3, []float64{1, 2, 3, 4, 5, 6})
+matrix2 = New{3, 3, []float64{7, 8, 9, 10, 11, 12, 13, 14, 15}}
 matrix = matrix.AddRow(matrix2)
 // if you set matrix it will be
 // 1 2 3
@@ -119,7 +119,7 @@ matrix = matrix.AddRow(matrix2)
 // 10 11 12
 // 13 14 15
 
-matrix = matrix.New(2, 3, []float64{1, 2, 3, 4, 5, 6})
+matrix = New(2, 3, []float64{1, 2, 3, 4, 5, 6})
 matrix = matrix.AddRow(7)
 // if you set int or float64, then you will get
 // 1 2 3
@@ -129,7 +129,7 @@ matrix = matrix.AddRow(7)
 
 ### Add row at head
 ```golang
-matrix := matrix.New(2, 3, []float64{1, 2, 3, 4, 5, 6})
+matrix := New(2, 3, []float64{1, 2, 3, 4, 5, 6})
 matrix = matrix.AddRowHEAD([]float64{7, 8, 9})
 // if you want to add row then you can use AddRow
 // if you use AddRow then matrix will be 
@@ -137,8 +137,8 @@ matrix = matrix.AddRowHEAD([]float64{7, 8, 9})
 // 1 2 3
 // 4 5 6
 
-matrix = matrix.New(2, 3, []float64{1, 2, 3, 4, 5, 6})
-matrix2 = matrix.New{3, 3, []float64{7, 8, 9, 10, 11, 12, 13, 14, 15}}
+matrix = New(2, 3, []float64{1, 2, 3, 4, 5, 6})
+matrix2 = New{3, 3, []float64{7, 8, 9, 10, 11, 12, 13, 14, 15}}
 matrix = matrix.AddRowHEAD(matrix2)
 // if you set matrix it will be
 // 7 8 9
@@ -147,7 +147,7 @@ matrix = matrix.AddRowHEAD(matrix2)
 // 1 2 3
 // 4 5 6
 
-matrix = matrix.New(2, 3, []float64{1, 2, 3, 4, 5, 6})
+matrix = New(2, 3, []float64{1, 2, 3, 4, 5, 6})
 matrix = matrix.AddRowHead(7)
 // if you set int or float64, then you will get
 // 7 7 7
@@ -157,7 +157,7 @@ matrix = matrix.AddRowHead(7)
 
 ### Get size
 ```golang
-matrix := matrix.New(2, 3, []float64{1, 2, 3, 4, 5, 6})
+matrix := New(2, 3, []float64{1, 2, 3, 4, 5, 6})
 row, column := matrix.Size()
 // then you wil get
 // row = 2
@@ -174,7 +174,7 @@ column = matrix.Column()
 
 ### Get at value
 ```golang 
-matrix := matrix.New(2, 3, []float64{1, 2, 3, 4, 5, 6})
+matrix := New(2, 3, []float64{1, 2, 3, 4, 5, 6})
 val, err := matrix.At(1, 1)
 // then you will get
 // val = 1
@@ -185,7 +185,7 @@ val, err = matrix.At(2, 2)
 
 ### Set at value
 ```golang
-matrix := matrix.New(2, 3, []float64{1, 2, 3, 4, 5, 6})
+matrix := New(2, 3, []float64{1, 2, 3, 4, 5, 6})
 err = matrix.Set(2, 1, float64(3.5))
 // then you will get
 // 1 2 3
@@ -194,7 +194,7 @@ err = matrix.Set(2, 1, float64(3.5))
 
 ### Reshape
 ```golang
-matrix := matrix.New(6, 1, []float64{1, 2, 3, 4, 5, 6})
+matrix := New(6, 1, []float64{1, 2, 3, 4, 5, 6})
 matrix = matrix.Reshape(2, 3)
 // then you will get
 // 1 2 3
@@ -203,8 +203,8 @@ matrix = matrix.Reshape(2, 3)
 
 ### Substitution B to A
 ```golang
-A := matrix.New(2, 3, []float64{1, 2, 3, 4, 5, 6})
-B := matrix.New(2, 2, []float64{1, 2, 3, 4})
+A := New(2, 3, []float64{1, 2, 3, 4, 5, 6})
+B := New(2, 2, []float64{1, 2, 3, 4})
 A.SetMatrix(B)
 // then A will be
 // 1 2
@@ -213,7 +213,7 @@ A.SetMatrix(B)
 
 ### Transpose matrix
 ```golang
-matrix := matrix.New(2, 3, []float64{1, 2, 3, 4, 5, 6})
+matrix := New(2, 3, []float64{1, 2, 3, 4, 5, 6})
 matrix = matrix.Transpose()
 // then matrix will be
 // 1 4
@@ -223,7 +223,7 @@ matrix = matrix.Transpose()
 
 ### SepRow matrix
 ```golang
-matrix := matrix.New{6, 3, []float64{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18}}
+matrix := New{6, 3, []float64{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18}}
 matrix = matrix.SepRow(2, 4)
 // then you will get matrix
 // 4, 5, 6
@@ -233,7 +233,7 @@ matrix = matrix.SepRow(2, 4)
 
 ### SepColumn matrix
 ```golang
-matrix := matrix.New{3, 6, []float64{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18}}
+matrix := New{3, 6, []float64{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18}}
 matrix = matrix.SepColumn(2, 4)
 // then you will get matrix
 // 2, 3, 4
@@ -243,7 +243,7 @@ matrix = matrix.SepColumn(2, 4)
 
 ### Vector
 ```golang
-matrix := matrix.New{2, 2, []float64{1, 2, 3, 4}}
+matrix := New{2, 2, []float64{1, 2, 3, 4}}
 matrix = matrix.Vector()
 // then you will get
 // 1
@@ -254,7 +254,7 @@ matrix = matrix.Vector()
 
 ### Show matrix
 ```golang
-matrix := matrix.New(2, 3, []float64{1, 2, 3, 4, 5, 6})
+matrix := New(2, 3, []float64{1, 2, 3, 4, 5, 6})
 matrix.Show()
 // it will do standard output like this
 // 1 2 3
@@ -265,13 +265,13 @@ matrix.Show()
 
 ### Add
 ```golang
-matrix := matrix.New(2, 3, []float64{1, 2, 3, 4, 5, 6})
+matrix := New(2, 3, []float64{1, 2, 3, 4, 5, 6})
 matrix = matrix.Add(2)
 // then matrix will be
 // 3 4 5
 // 6 7 8
 
-matrix2 := matrix.New(2, 3, []float64{1, 2, 3, 4, 5, 6})
+matrix2 := New(2, 3, []float64{1, 2, 3, 4, 5, 6})
 matrix = matrix.Add(matrix2)
 // then matrix will be
 // 2 4 6
@@ -279,13 +279,13 @@ matrix = matrix.Add(matrix2)
 ```
 ### Sub
 ```golang
-matrix := matrix.New(2, 3, []float64{1, 2, 3, 4, 5, 6})
+matrix := New(2, 3, []float64{1, 2, 3, 4, 5, 6})
 matrix = matrix.Sub(2)
 // then matrix will be
 // -1 0 1
 // 2 3 4
 
-matrix2 := matrix.New(2, 3, []float64{1, 2, 3, 4, 5, 6})
+matrix2 := New(2, 3, []float64{1, 2, 3, 4, 5, 6})
 matrix = matrix.Sub(matrix2)
 // then matrix will be
 // 0 0 0
@@ -293,15 +293,15 @@ matrix = matrix.Sub(matrix2)
 ```
 ### Multi
 ```golang
-matrix := matrix.New(2, 3, []float64{1, 2, 3, 4, 5, 6})
+matrix := New(2, 3, []float64{1, 2, 3, 4, 5, 6})
 matrix = matrix.Multi(2)
 // then matrix will be
 // it do the same move to Multi Each
 // 2 4 6
 // 8 10 12
 
-matrix = matrix.New(2, 3, []float64{1, 2, 3, 4, 5, 6})
-matrix2 = matrix.New(3, 1, []float64{1, 2, 3})
+matrix = New(2, 3, []float64{1, 2, 3, 4, 5, 6})
+matrix2 = New(3, 1, []float64{1, 2, 3})
 matrix = matrix.Multi(matrix2)
 // if you Multi matrix your matrix will be
 // 14
@@ -309,15 +309,15 @@ matrix = matrix.Multi(matrix2)
 ```
 ### Multi Each
 ```golang
-matrix := matrix.New(2, 3, []float64{1, 2, 3, 4, 5, 6})
+matrix := New(2, 3, []float64{1, 2, 3, 4, 5, 6})
 matrix = matrix.MultiEach(2)
 // then matrix will be
 // it do the same move to Multi Each
 // 2 4 6
 // 8 10 12
 
-matrix = matrix.New(2, 3, []float64{1, 2, 3, 4, 5, 6})
-matrix2 = matrix.New(3, 1, []float64{1, 2, 3, 4, 5, 6})
+matrix = New(2, 3, []float64{1, 2, 3, 4, 5, 6})
+matrix2 = New(3, 1, []float64{1, 2, 3, 4, 5, 6})
 matrix = matrix.MultiEach(matrix2)
 // if you Multi matrix your matrix will be
 // 1 4 9
@@ -328,14 +328,14 @@ matrix = matrix.MultiEach(matrix2)
 if you divin by 0 you will get Inf.
 
 ```golang
-matrix := matrix.New(2, 3, []float64{1, 2, 3, 4, 5, 6})
+matrix := New(2, 3, []float64{1, 2, 3, 4, 5, 6})
 matrix = matrix.Div(0.1)
 // then matrix will be 
 // 10 20 30
 // 40 50 60
 
-matrix = matrix.New(2, 3, []float64{1, 2, 3, 4, 5, 6})
-matrix2 = matrix.New(2, 3, []float64{1, 2, 3, 4, 5, 6})
+matrix = New(2, 3, []float64{1, 2, 3, 4, 5, 6})
+matrix2 = New(2, 3, []float64{1, 2, 3, 4, 5, 6})
 matrix = matrix.Div(matrix2)
 // then matrix will be 
 // 1 1 1
@@ -344,7 +344,7 @@ matrix = matrix.Div(matrix2)
 
 ### Sigmoid
 ```golang
-matrix := matrix.New{3, 4, []float64{1, 2, 3, 4, 5, 6, -1, -2, -3}}
+matrix := New{3, 4, []float64{1, 2, 3, 4, 5, 6, -1, -2, -3}}
 matrix = matrix.Sigmoid()
 // then you will get (almost)
 // 0.731059   0.880797   0.952574
