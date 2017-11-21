@@ -81,6 +81,15 @@ matrix := matrix.NewRandom(2, 4, 3)
 // 0.646 0.683 0.573 0.198
 ```
 
+## Create Eye Matrix
+```golang
+matrix := matrix.NewEye(3)
+// then you will get
+// 1 0 0
+// 0 1 0
+// 0 0 1
+```
+
 ### Copy your matrix
 ```golang 
 matrix := matrix.New(2, 3, []float64{1, 2, 3, 4, 5, 6})

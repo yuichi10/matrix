@@ -111,6 +111,22 @@ func NewHotVector(size, place int) (matrix *Matrix) {
 	return
 }
 
+// NewEye will return Unit matrix
+func NewEye(length int) (matrix *Matrix) {
+	matrix = new(Matrix)
+	if length <= 0 {
+		matrix.err = newError("lenght should greater than 0", "NewEye", matrix, nil)
+		return
+	}
+	matrix.row = length
+	matrix.column = length
+	matrix.matrix = make([]float64, length*length)
+	for i := 0; i < length; i++ {
+		matrix.matrix[matrix.column*i+i] = 1
+	}
+	return
+}
+
 // Copy will copy matrix
 func Copy(mat *Matrix) *Matrix {
 	vector := make([]float64, len(mat.matrix))

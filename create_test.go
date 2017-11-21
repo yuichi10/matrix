@@ -167,6 +167,32 @@ func TestNewHotVectorError(t *testing.T) {
 	}
 }
 
+func TestNewEye(t *testing.T) {
+	var matrix *Matrix
+	var answer *Matrix
+	matrix = NewEye(3)
+	answer = New(3, 3, []float64{1, 0, 0, 0, 1, 0, 0, 0, 1})
+	if matrix.Err() != nil {
+		t.Errorf("Should be error nil but got %v", matrix.Err())
+	}
+	if !reflect.DeepEqual(answer, matrix) {
+		t.Errorf("want %#v got %#v", answer, matrix)
+	}
+}
+
+func TestNewEyeError(t *testing.T) {
+	var matrix *Matrix
+	matrix = NewEye(0)
+	if matrix.Err() == nil {
+		t.Errorf("You should get error but got nil")
+	}
+
+	matrix = NewEye(-1)
+	if matrix.Err() == nil {
+		t.Errorf("You should get error but got nil")
+	}
+}
+
 func TestCopy(t *testing.T) {
 	var matrix *Matrix
 	var answer *Matrix
