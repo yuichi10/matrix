@@ -156,6 +156,90 @@ func TestAddRowHEADError(t *testing.T) {
 	}
 }
 
+func TestAddColumn(t *testing.T) {
+	var matrix *Matrix
+	var matrix2 *Matrix
+	var answer *Matrix
+	var vector []float64
+	matrix = New(3, 2, []float64{1, 2, 3, 4, 5, 6})
+	matrix2 = New(3, 3, []float64{7, 8, 9, 10, 11, 12, 13, 14, 15})
+	answer = New(3, 5, []float64{1, 2, 7, 8, 9, 3, 4, 10, 11, 12, 5, 6, 13, 14, 15})
+	matrix = matrix.AddColumn(*matrix2)
+	if matrix.Err() != nil {
+		t.Errorf("Should be error nil but got %v", matrix.Err())
+	}
+	if !reflect.DeepEqual(answer, matrix) {
+		t.Errorf("want %#v got %#v", answer, matrix)
+	}
+
+	matrix = New(3, 2, []float64{1, 2, 3, 4, 5, 6})
+	matrix2 = New(3, 3, []float64{7, 8, 9, 10, 11, 12, 13, 14, 15})
+	answer = New(3, 5, []float64{1, 2, 7, 8, 9, 3, 4, 10, 11, 12, 5, 6, 13, 14, 15})
+	matrix = matrix.AddColumn(matrix2)
+	if matrix.Err() != nil {
+		t.Errorf("Should be error nil but got %v", matrix.Err())
+	}
+	if !reflect.DeepEqual(answer, matrix) {
+		t.Errorf("want %#v got %#v", answer, matrix)
+	}
+
+	matrix = New(3, 2, []float64{1, 2, 3, 4, 5, 6})
+	vector = []float64{7, 8, 9}
+	answer = New(3, 3, []float64{1, 2, 7, 3, 4, 8, 5, 6, 9})
+	matrix = matrix.AddColumn(vector)
+	if matrix.Err() != nil {
+		t.Errorf("Should be error nil but got %v", matrix.Err())
+	}
+	if !reflect.DeepEqual(answer, matrix) {
+		t.Errorf("want %#v got %#v", answer, matrix)
+	}
+
+	matrix = New(3, 2, []float64{1, 2, 3, 4, 5, 6})
+	answer = New(3, 3, []float64{1, 2, 7, 3, 4, 7, 5, 6, 7})
+	matrix = matrix.AddColumn(7)
+	if matrix.Err() != nil {
+		t.Errorf("Should be error nil but got %v", matrix.Err())
+	}
+	if !reflect.DeepEqual(answer, matrix) {
+		t.Errorf("want %#v got %#v", answer, matrix)
+	}
+
+	matrix = New(3, 2, []float64{1, 2, 3, 4, 5, 6})
+	answer = New(3, 3, []float64{1, 2, 7.8, 3, 4, 7.8, 5, 6, 7.8})
+	matrix = matrix.AddColumn(7.8)
+	if matrix.Err() != nil {
+		t.Errorf("Should be error nil but got %v", matrix.Err())
+	}
+	if !reflect.DeepEqual(answer, matrix) {
+		t.Errorf("want %#v got %#v", answer, matrix)
+	}
+}
+
+func TestAddColumnError(t *testing.T) {
+	var matrix *Matrix
+	var matrix2 *Matrix
+	var vector []float64
+	matrix = New(3, 2, []float64{1, 2, 3, 4, 5, 6})
+	matrix2 = New(2, 3, []float64{7, 8, 9, 10, 11, 12})
+	matrix = matrix.AddColumn(matrix2)
+	if matrix.Err() == nil {
+		t.Errorf("Should get error but got nil")
+	}
+
+	matrix = New(3, 2, []float64{1, 2, 3, 4, 5, 6})
+	vector = []float64{7, 8, 9, 10}
+	matrix = matrix.AddColumn(vector)
+	if matrix.Err() == nil {
+		t.Errorf("Should get error but got nil")
+	}
+
+	matrix = New(3, 2, []float64{1, 2, 3, 4, 5, 6})
+	matrix = matrix.AddColumn("not allowed type")
+	if matrix.Err() == nil {
+		t.Errorf("Should get error but got nil")
+	}
+}
+
 func TestSepRow(t *testing.T) {
 	var matrix *Matrix
 	var matrix2 *Matrix
@@ -234,3 +318,17 @@ func TestSepColumnError(t *testing.T) {
 		t.Errorf("Should get error but got nil")
 	}
 }
+
+func benchAddColumn(b *testing.B, size, count int) {
+	matrix := New(size, size, nil)
+	matrix2 := New(size, size, nil)
+	b.ReportAllocs()
+	for i := 0; i < count; i++ {
+		matrix.AddColumn(matrix2)
+	}
+}
+
+func BenchmarkAddColumn200_200(b *testing.B)   { benchAddColumn(b, 200, 200) }
+func BenchmarkAddColumn200_2000(b *testing.B)  { benchAddColumn(b, 200, 2000) }
+func BenchmarkAddColumn2000_200(b *testing.B)  { benchAddColumn(b, 2000, 200) }
+func BenchmarkAddColumn2000_2000(b *testing.B) { benchAddColumn(b, 2000, 2000) }

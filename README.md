@@ -39,7 +39,7 @@ matrix = matrix.Multi(matrix2)
 matrix.Err()
 // it will show you that err happen
 ```
-# operation
+# Create
 ### Create Matrix
 ```golang
 
@@ -99,6 +99,7 @@ matrix2 := matrix.Copy(matrix)
 // 4 5 6
 ```
 
+# Operation
 ### Add row
 ```golang
 matrix := New(2, 3, []float64{1, 2, 3, 4, 5, 6})
@@ -153,6 +154,29 @@ matrix = matrix.AddRowHead(7)
 // 7 7 7
 // 1 2 3
 // 4 5 6
+```
+
+### Add column
+```golang
+matrix := New(2, 3, []float64{1, 2, 3, 4, 5, 6})
+matrix = matrix.AddColumn([]float64{7, 8})
+// if you want to add row then you can use AddRow
+// if you use AddRow then matrix will be 
+// 1 2 3 7
+// 4 5 6 8
+
+matrix = New(2, 3, []float64{1, 2, 3, 4, 5, 6})
+matrix2 = New{2, 2, []float64{7, 8, 9, 10}}
+matrix = matrix.AddColumn(matrix2)
+// if you set matrix it will be
+// 1 2 3 7 8
+// 4 5 6 9 10
+
+matrix = New(2, 3, []float64{1, 2, 3, 4, 5, 6})
+matrix = matrix.AddColumn(7)
+// if you set int or float64, then you will get
+// 1 2 3 7
+// 4 5 6 7
 ```
 
 ### Get size

@@ -106,6 +106,84 @@ func (m *Matrix) AddRowHEAD(num interface{}) (matrix *Matrix) {
 	return
 }
 
+func (m *Matrix) addColumnMatrix(mat Matrix) error {
+	if m.row != mat.row {
+		return errors.New("Row length is not same")
+	}
+	result := make([]float64, len(m.matrix)+len(mat.matrix))
+	c := 0
+	for i := 0; i < mat.row; i++ {
+		for j := 0; j < m.column; j++ {
+			result[c] = m.matrix[i*m.column+j]
+			c++
+		}
+		for j := 0; j < mat.column; j++ {
+			result[c] = mat.matrix[i*mat.column+j]
+			c++
+		}
+	}
+	m.column = m.column + mat.column
+	m.matrix = result
+	return nil
+}
+
+func (m *Matrix) addColumnArray(vector []float64) error {
+	if m.row != len(vector) {
+		return errors.New("Given vector and matrix row length is not same")
+	}
+	result := make([]float64, len(m.matrix)+len(vector))
+	c := 0
+	for i := 0; i < m.row; i++ {
+		for j := 0; j < m.column; j++ {
+			result[c] = m.matrix[i*m.column+j]
+			c++
+		}
+		result[c] = vector[i]
+		c++
+	}
+	m.column++
+	m.matrix = result
+	return nil
+}
+
+func (m *Matrix) addColumnNumber(num float64) {
+	result := make([]float64, len(m.matrix)+m.row)
+	c := 0
+	for i := 0; i < m.row; i++ {
+		for j := 0; j < m.column; j++ {
+			result[c] = m.matrix[i*m.column+j]
+			c++
+		}
+		result[c] = num
+		c++
+	}
+	m.column++
+	m.matrix = result
+}
+
+// AddColumn will add column
+func (m *Matrix) AddColumn(num interface{}) (matrix *Matrix) {
+	matrix = Copy(m)
+	if mat, ok := num.(Matrix); ok {
+		matrix.err = matrix.addColumnMatrix(mat)
+		return
+	} else if mat, ok := num.(*Matrix); ok {
+		matrix.err = matrix.addColumnMatrix(*mat)
+		return
+	} else if row, ok := num.([]float64); ok {
+		matrix.err = matrix.addColumnArray(row)
+		return
+	} else if row, ok := num.(int); ok {
+		matrix.addColumnNumber(float64(row))
+		return
+	} else if row, ok := num.(float64); ok {
+		matrix.addColumnNumber(row)
+		return
+	}
+	matrix.err = errors.New("The argument type is not allowed")
+	return
+}
+
 // SepRow will return matrix which separate by row numbers
 func (m *Matrix) SepRow(start, end int) (matrix *Matrix) {
 	matrix = Copy(m)
