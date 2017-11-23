@@ -385,3 +385,12 @@ matrix = matrix.SigmoidGradient()
 // 0.0176627   0.0066481   0.0024665
 // 0.1966119   0.1049936   0.0451767
 ```
+
+### Power
+```golang
+matrix := New(3, 3, []float64{1, 2, 3, 4, 5, 6, -1, -2, -3})
+matrix = matrix.Power(3)
+// then you will get
+// 1 8 27
+// 64 125 216
+// -1 -8 -27

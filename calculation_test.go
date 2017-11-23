@@ -2,6 +2,7 @@ package matrix
 
 import (
 	"math"
+	"reflect"
 	"testing"
 )
 
@@ -39,4 +40,16 @@ func TestSigmoidGradient(t *testing.T) {
 			}
 		}
 	}
+}
+
+func TestPower(t *testing.T) {
+	var matrix *Matrix
+	var answer *Matrix
+	matrix = New(3, 3, []float64{1, 2, 3, 4, 5, 6, -1, -2, -3})
+	answer = New(3, 3, []float64{1, 8, 27, 64, 125, 216, -1, -8, -27})
+	matrix = matrix.Power(3)
+	if !reflect.DeepEqual(answer, matrix) {
+		t.Errorf("want %#v got %#v", answer, matrix)
+	}
+	matrix.Show()
 }

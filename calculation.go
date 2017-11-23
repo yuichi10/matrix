@@ -20,3 +20,12 @@ func (m *Matrix) SigmoidGradient() (matrix *Matrix) {
 	matrix = Copy(m)
 	return matrix.Sigmoid().MultiEach(matrix.Sigmoid().MultiEach(-1).Add(1))
 }
+
+// Power will return power of matrix
+func (m *Matrix) Power(e float64) (matrix *Matrix) {
+	matrix = Copy(m)
+	for i := 0; i < len(m.matrix); i++ {
+		matrix.matrix[i] = math.Pow(matrix.matrix[i], e)
+	}
+	return
+}
