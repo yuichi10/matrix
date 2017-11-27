@@ -420,3 +420,21 @@ fmt.Println(perm.result.value.(string))
 // Each: [2 3 1]
 // Each: [3 2 1]
 ```
+
+### Sgn
+Sgn will return 1 when even permutation
+Sgn will return -1 when odd permutation
+
+```golang
+result := Sgn([]int{1, 2, 3, 4})
+// then result will be
+// 1
+
+result := Sgn([]int{2, 1, 3, 4})
+// then result will be
+// -1
+
+result := Sgn([]int{2, 1, 4, 3})
+// then result will be
+// 1
+```

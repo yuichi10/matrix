@@ -18,3 +18,31 @@ func TestPermutation(t *testing.T) {
 		t.Errorf("want %v but got %v", answer, perm.result.value)
 	}
 }
+
+func TestSgn(t *testing.T) {
+	result := 0
+	result = Sgn([]int{1, 2, 3, 4})
+	if result != 1 {
+		t.Errorf("want %#v got %#v", 1, result)
+	}
+
+	result = Sgn([]int{2, 1, 3, 4})
+	if result != -1 {
+		t.Errorf("want %#v got %#v", -1, result)
+	}
+
+	result = Sgn([]int{2, 1, 4, 3})
+	if result != 1 {
+		t.Errorf("want %#v got %#v", 1, result)
+	}
+
+	result = Sgn([]int{4, 1, 2, 3})
+	if result != -1 {
+		t.Errorf("want %#v got %#v", -1, result)
+	}
+
+	result = Sgn(nil)
+	if result != 0 {
+		t.Errorf("want %#v got %#v", 0, result)
+	}
+}
