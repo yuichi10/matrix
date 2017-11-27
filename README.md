@@ -438,3 +438,11 @@ result := Sgn([]int{2, 1, 4, 3})
 // then result will be
 // 1
 ```
+
+### Determinant
+```golang
+matrix := New(4, 4, []float64{3, 1, 1, 2, 5, 1, 3, 4, 2, 0, 1, 0, 1, 3, 2, 1})
+result, _ := matrix.Determinant()
+// then you will get
+// -22
+```

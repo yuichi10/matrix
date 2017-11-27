@@ -1,6 +1,9 @@
 package matrix
 
-import "math"
+import (
+	"errors"
+	"math"
+)
 
 var a []int
 var n int
@@ -74,4 +77,31 @@ func Sgn(num []int) int {
 		return -1
 	}
 	return 1
+}
+
+// Determinant will calculate determinant
+func (m *Matrix) Determinant() (float64, error) {
+	if m.row != m.column {
+		// TODO REUTN ERROR
+		return 0, errors.New("This is not square error")
+	}
+	f := func(res []int, preResult *PermResult, matrix interface{}) *PermResult {
+		result := new(PermResult)
+		var pre float64
+		pre = 0
+		if preResult != nil {
+			pre, _ = preResult.value.(float64)
+		}
+		mat, _ := matrix.(*Matrix)
+		var ans float64
+		ans = 1
+		for i := 0; i < len(res); i++ {
+			val, _ := mat.At(i+1, res[i])
+			ans *= val
+		}
+		result.value = pre + float64(Sgn(res))*ans
+		return result
+	}
+	perm := PermutationProcess(m.row, f, m)
+	return perm.result.value.(float64), perm.result.err
 }
