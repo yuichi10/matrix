@@ -394,3 +394,29 @@ matrix = matrix.Power(3)
 // 1 8 27
 // 64 125 216
 // -1 -8 -27
+```
+
+# Util
+### Permutation Process
+This is complex and maybe almost user does not use this function
+
+The return value of function f will seted to perm.result
+```golang
+f := func(each []int, preRes *PermResult, arg interface{}) *PermResult {
+		if preRes.value == nil {
+			preRes.value = fmt.Sprintf("%s: %v", arg, each)
+			return preRes
+		}
+		preRes.value = fmt.Sprintf("%s\n%s: %v", preRes.value, arg, each)
+		return preRes
+    }
+perm := PermutationProcess(3, f, "Each")
+fmt.Println(perm.result.value.(string))
+// then you will get 
+// Each: [1 2 3]
+// Each: [1 3 2]
+// Each: [3 1 2]
+// Each: [2 1 3]
+// Each: [2 3 1]
+// Each: [3 2 1]
+```

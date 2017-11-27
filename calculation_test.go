@@ -51,5 +51,4 @@ func TestPower(t *testing.T) {
 	if !reflect.DeepEqual(answer, matrix) {
 		t.Errorf("want %#v got %#v", answer, matrix)
 	}
-	matrix.Show()
 }
