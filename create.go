@@ -73,7 +73,7 @@ func NewVector(row []float64) (matrix *Matrix) {
 }
 
 // NewRandom will return matrix which values are 0~1
-func NewRandom(row, column int, digits uint8) (matrix *Matrix) {
+func NewRandom(row, column int, decimal uint8) (matrix *Matrix) {
 	matrix = new(Matrix)
 	if row <= 0 || column <= 0 {
 		matrix.err = errors.New("Length is not greater 0")
@@ -82,7 +82,7 @@ func NewRandom(row, column int, digits uint8) (matrix *Matrix) {
 	matrix.row = row
 	matrix.column = column
 	matrix.matrix = make([]float64, row*column)
-	d := math.Pow10(int(digits))
+	d := math.Pow10(int(decimal))
 	var s int64
 	if err := binary.Read(crand.Reader, binary.LittleEndian, &s); err != nil {
 		s = time.Now().UnixNano()
