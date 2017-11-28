@@ -85,23 +85,26 @@ func (m *Matrix) Determinant() (float64, error) {
 		// TODO REUTN ERROR
 		return 0, errors.New("This is not square error")
 	}
-	f := func(res []int, preResult *PermResult, matrix interface{}) *PermResult {
-		result := new(PermResult)
-		var pre float64
-		pre = 0
-		if preResult != nil {
-			pre, _ = preResult.value.(float64)
+	length := m.Row()
+	matrix := Copy(m)
+	for i := 1; i <= length; i++ {
+		for j := 1; j <= length; j++ {
+			if i < j {
+				aji, _ := matrix.At(j, i)
+				aii, _ := matrix.At(i, i)
+				buf := aji / aii
+				for k := 1; k <= length; k++ {
+					ajk, _ := matrix.At(j, k)
+					aik, _ := matrix.At(i, k)
+					matrix.Set(j, k, ajk-aik*buf)
+				}
+			}
 		}
-		mat, _ := matrix.(*Matrix)
-		var ans float64
-		ans = 1
-		for i := 0; i < len(res); i++ {
-			val, _ := mat.At(i+1, res[i])
-			ans *= val
-		}
-		result.value = pre + float64(Sgn(res))*ans
-		return result
 	}
-	perm := PermutationProcess(m.row, f, m)
-	return perm.result.value.(float64), perm.result.err
+	result := float64(1)
+	for i := 1; i <= length; i++ {
+		aii, _ := matrix.At(i, i)
+		result *= aii
+	}
+	return result, nil
 }
