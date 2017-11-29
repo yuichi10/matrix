@@ -37,16 +37,17 @@ func ExampleShow() {
 	var matrix *Matrix
 	matrix = &Matrix{2, 3, []float64{1, 2, 3, 4, 5, 6}, nil}
 	matrix.Show()
-	matrix = &Matrix{3, 2, []float64{1, 2, 3, 4, 5, 6}, nil}
+	matrix = &Matrix{3, 2, []float64{1.1, 2.1234, 3.12345, 4.123456, 5.123455, 0.6}, nil}
 	matrix.Show()
 	// Output:
 	// size: 2 x 3
-	// 1 2 3
-	// 4 5 6
+	// 1.00000 2.00000 3.00000
+	// 4.00000 5.00000 6.00000
+	//
 	// size: 3 x 2
-	// 1 2
-	// 3 4
-	// 5 6
+	// 1.10000 2.12340
+	// 3.12345 4.12346
+	// 5.12345 0.60000
 }
 
 func TestErr(t *testing.T) {

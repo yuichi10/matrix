@@ -44,13 +44,15 @@ func (m *Matrix) Size() (int, int) {
 // Show will show matrix condition
 func (m *Matrix) Show() {
 	fmt.Printf("size: %v x %v\n", m.Row(), m.Column())
+	text := ""
 	for i := 0; i < m.row; i++ {
 		line := ""
 		for j := 0; j < m.column; j++ {
-			line = fmt.Sprintf("%v %v", line, m.matrix[i*m.column+j])
+			line = fmt.Sprintf("%v %.5f", line, m.matrix[i*m.column+j])
 		}
-		fmt.Println(strings.Trim(line, " "))
+		text += strings.Trim(line, " ") + "\n"
 	}
+	fmt.Println(text)
 }
 
 // Err will return error of calcuration

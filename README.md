@@ -277,12 +277,14 @@ matrix = matrix.Vector()
 ```
 
 ### Show matrix
+Now show will show 5 decimal
 ```golang
-matrix := New(2, 3, []float64{1, 2, 3, 4, 5, 6})
+matrix = &Matrix{3, 2, []float64{1.1, 2.1234, 3.12345, 4.123456, 5.123455, 0.6}, nil}
 matrix.Show()
 // it will do standard output like this
-// 1 2 3
-// 4 5 6
+// 1.10000 2.12340
+// 3.12345 4.12346
+// 5.12345 0.60000
 ```
 
 # calculation
