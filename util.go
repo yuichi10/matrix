@@ -79,6 +79,18 @@ func Sgn(num []int) int {
 	return 1
 }
 
+func (m *Matrix) findNonZeroFromBelowRow(r, c int) (row int, err error) {
+	if r > m.row || c > m.column {
+		return -1, errors.New("The row or column are outside of this matrix")
+	}
+	for i := r + 1; i <= m.row; i++ {
+		if val, _ := m.At(i, c); val != 0 {
+			return i, nil
+		}
+	}
+	return -1, errors.New("There is no available row")
+}
+
 // Determinant will calculate determinant
 func (m *Matrix) Determinant() (float64, error) {
 	if m.row != m.column {
@@ -92,11 +104,24 @@ func (m *Matrix) Determinant() (float64, error) {
 			if i < j {
 				aji, _ := matrix.At(j, i)
 				aii, _ := matrix.At(i, i)
-				buf := aji / aii
-				for k := 1; k <= length; k++ {
-					ajk, _ := matrix.At(j, k)
-					aik, _ := matrix.At(i, k)
-					matrix.Set(j, k, ajk-aik*buf)
+				if aii != 0 {
+					buf := aji / aii
+					for k := 1; k <= length; k++ {
+						ajk, _ := matrix.At(j, k)
+						aik, _ := matrix.At(i, k)
+						matrix.Set(j, k, ajk-aik*buf)
+					}
+				} else if aii == 0 {
+					r, err := matrix.findNonZeroFromBelowRow(i, i)
+					if err != nil {
+						return 0, errors.New("there is no Determinant")
+					}
+					for k := 1; k <= length; k++ {
+						aik, _ := matrix.At(i, k)
+						ark, _ := matrix.At(r, k)
+						matrix.Set(i, k, aik+ark)
+						j--
+					}
 				}
 			}
 		}

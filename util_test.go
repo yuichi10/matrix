@@ -2,6 +2,7 @@ package matrix
 
 import "testing"
 import "fmt"
+import "math"
 
 func TestPermutation(t *testing.T) {
 	f := func(each []int, preRes *PermResult, arg interface{}) *PermResult {
@@ -82,6 +83,22 @@ func TestDeterminant(t *testing.T) {
 	high = -21.9
 	if err != nil {
 		t.Errorf("The error should be nil but got %v", err)
+	}
+	if result > high || result < row {
+		t.Errorf("want %v but got %v", answer, result)
+	}
+
+	matrix = New(4, 4, []float64{0, 1, 1, 2, 5, 1, 3, 4, 2, 0, 2, 0, 1, 3, 2, 1})
+	result, err = matrix.Determinant()
+	row = 37.9
+	high = 38.1
+	answer = 38
+	fmt.Println(result)
+	if err != nil {
+		t.Errorf("The error should be nil but got %v", err)
+	}
+	if math.IsNaN(result) {
+		t.Errorf("want %v but got NaN", answer)
 	}
 	if result > high || result < row {
 		t.Errorf("want %v but got %v", answer, result)
