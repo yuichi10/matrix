@@ -27,6 +27,7 @@ func TestError(t *testing.T) {
 	opt2 = New(4, 5, nil)
 	f := func() { newError("sample", "TestError", opt1, opt2) }
 	assertPanic(t, f)
+	Config.Panic = false
 }
 
 func assertPanic(t *testing.T, f func()) {

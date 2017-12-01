@@ -52,6 +52,9 @@ func (m *Matrix) Show() {
 		}
 		text += strings.Trim(line, " ") + "\n"
 	}
+	if m.err != nil {
+		text += m.err.Error() + "\n"
+	}
 	fmt.Println(text)
 }
 

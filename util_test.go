@@ -93,7 +93,6 @@ func TestDeterminant(t *testing.T) {
 	row = 37.9
 	high = 38.1
 	answer = 38
-	fmt.Println(result)
 	if err != nil {
 		t.Errorf("The error should be nil but got %v", err)
 	}
