@@ -245,6 +245,16 @@ matrix = matrix.Transpose()
 // 3 6
 ```
 
+### Inverse matrix
+```golang
+matrix := New(4, 4, []float64{1, 2, 0, -1, -1, 1, 2, 0, 2, 0, 1, 1, 1, -2, -1, 1})
+matrix = matrix.Inverse()
+// then you will get Approximately
+// -2,   2, -1,   3
+// -4,  -5,  3,  -7
+//  3,   4, -2,   5
+// -7,  -8,  5, -11
+
 ### SepRow matrix
 ```golang
 matrix := New{6, 3, []float64{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18}}
