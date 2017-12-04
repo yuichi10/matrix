@@ -93,3 +93,12 @@ func (m *Matrix) SetMatrix(mat *Matrix) {
 	m.matrix = vector
 	return
 }
+
+// Int will make all value int
+func (m *Matrix) Int() (matrix *Matrix) {
+	matrix = Copy(m)
+	for i := 0; i < len(matrix.matrix); i++ {
+		matrix.matrix[i] = float64(int(matrix.matrix[i]))
+	}
+	return
+}

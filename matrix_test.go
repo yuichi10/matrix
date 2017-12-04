@@ -135,3 +135,14 @@ func TestSetMatrix(t *testing.T) {
 		t.Errorf("Should get error but got nil")
 	}
 }
+
+func TestInt(t *testing.T) {
+	var matrix *Matrix
+	var answer *Matrix
+	matrix = New(3, 3, []float64{0.4, 0.5, 0.6, 1.4, 1.5, 1.6, 2.4, 2.5, 2.9})
+	answer = New(3, 3, []float64{0, 0, 0, 1, 1, 1, 2, 2, 2})
+	matrix = matrix.Int()
+	if !reflect.DeepEqual(answer, matrix) {
+		t.Errorf("want %#v got %#v", answer, matrix)
+	}
+}
