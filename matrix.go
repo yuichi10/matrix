@@ -41,6 +41,11 @@ func (m *Matrix) Size() (int, int) {
 	return m.row, m.column
 }
 
+// RawMatrix returns []float64 array
+func (m *Matrix) RawMatrix() []float64 {
+	return m.matrix
+}
+
 // Show will show matrix condition
 func (m *Matrix) Show() {
 	fmt.Printf("size: %v x %v\n", m.Row(), m.Column())
