@@ -107,3 +107,16 @@ func (m *Matrix) Int() (matrix *Matrix) {
 	}
 	return
 }
+
+// TextAsOneLine return matrix string
+func (m *Matrix) TextAsOneLine(delimiter string) (text string) {
+	text = ""
+	for _, val := range m.matrix {
+		if text == "" {
+			text = fmt.Sprintf("%f", val)
+		} else {
+			text = fmt.Sprintf("%s%s%f", text, delimiter, val)
+		}
+	}
+	return
+}
