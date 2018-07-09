@@ -124,7 +124,7 @@ func TestSetMatrix(t *testing.T) {
 	answer = createUniformMatrix(3, 5, 6)
 	matrix.SetMatrix(answer)
 	if matrix.Err() != nil {
-		t.Errorf("Should be error nil but got %v", matrix.Err)
+		t.Errorf("Should be error nil but got %v", matrix.Err())
 	}
 	if !reflect.DeepEqual(answer, matrix) {
 		t.Errorf("want %#v got %#v", answer, matrix)
