@@ -1,7 +1,7 @@
 image: golang:1.10
 before_script:
   - curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
-  - cp -r /builds/user /go/src/github.com/yuichi10/
+  - cp -r /builds/yuichi101 /go/src/github.com/yuichi10/
   - cd /go/src/github.com/yuichi10/matrix
   - dep ensure
   - pwd
