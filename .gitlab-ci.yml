@@ -38,13 +38,14 @@ cleanup_build_job_success:
 
 golint:
   stage: test
+  environment:
+    on_stop: test_cover
   before_script: 
     - go get -u golang.org/x/lint/golint
   script:
     - golint 
   after_script:
     - ls
-
 
 test_manual:
   stage: test
