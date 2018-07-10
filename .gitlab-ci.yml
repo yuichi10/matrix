@@ -55,6 +55,8 @@ test_manual:
 
 test_cover:
   stage: test
+  environment:
+    action: stop
   script:
     - go test -cover
 
