@@ -39,6 +39,7 @@ cleanup_build_job_success:
 golint:
   stage: test
   environment:
+    name: test
     on_stop: test_cover
   before_script: 
     - go get -u golang.org/x/lint/golint
@@ -56,6 +57,7 @@ test_manual:
 test_cover:
   stage: test
   environment:
+    name: test
     action: stop
   script:
     - go test -cover
