@@ -1,0 +1,14 @@
+image: golang:1.10
+before_script:
+  - curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
+  - dep ensure
+  - pwd
+
+
+golint:
+  script:
+    - golint 
+
+test:
+  script:
+    - go test -cover
