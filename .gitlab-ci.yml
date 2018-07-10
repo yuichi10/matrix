@@ -31,7 +31,21 @@ golint:
   after_script:
     - ls
 
-test:
+test_cover:
   stage: test
   script:
     - go test -cover
+
+test_without_master:
+  stage: test
+  script:
+    - go test -cover 
+  except: 
+    - master
+
+test_only_master:
+  stage: test
+  script:
+    - go test -cover 
+  only: 
+    - master
