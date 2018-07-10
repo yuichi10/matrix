@@ -1,7 +1,9 @@
 image: golang:1.10
 stages:
   - build
+  - cleanup_build
   - test
+
 before_script:
   - curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
   - pwd
@@ -22,6 +24,18 @@ build:
   script:
     - go build .
 
+cleanup_build_job:
+  stage: cleanup_build
+  script:
+    - echo "clean up for failed!!!!!!"
+  when: on_failure
+
+cleanup_build_job_success:
+  stage: cleanup_build
+  script:
+    - echo "clean up for success!!!!!!"
+  when: on_success
+
 golint:
   stage: test
   before_script: 
@@ -30,6 +44,13 @@ golint:
     - golint 
   after_script:
     - ls
+
+
+test_manual:
+  stage: test
+  script:
+    - go test -cover
+  when: manual
 
 test_cover:
   stage: test
