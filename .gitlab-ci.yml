@@ -5,6 +5,7 @@ stages:
 before_script:
   - curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
   - pwd
+  - mkdir -p /go/src/github.com/yuichi10/
   - cp -r /builds/yuichi101 /go/src/github.com/yuichi10/
   - cd /go/src/github.com/yuichi10/matrix
   - dep ensure
