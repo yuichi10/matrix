@@ -40,7 +40,7 @@ golint:
   stage: test
   environment:
     name: test
-    on_stop: test_cover
+    on_stop: test_manual
   before_script: 
     - go get -u golang.org/x/lint/golint
   script:
@@ -50,6 +50,9 @@ golint:
 
 test_manual:
   stage: test
+  environment:
+    name: test
+    action: stop
   script:
     - go test -cover
   when: manual
