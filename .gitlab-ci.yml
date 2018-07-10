@@ -1,4 +1,7 @@
 image: golang:1.10
+stages:
+  - build
+  - test
 before_script:
   - curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
   - pwd
@@ -6,14 +9,28 @@ before_script:
   - cd /go/src/github.com/yuichi10/matrix
   - dep ensure
 
+
+build-1.8:
+  stage: build
+  script:
+    - go build .
+  image: golang:1.8
+
 build:
+  stage: build
   script:
     - go build .
 
 golint:
+  stage: test
+  before_script: 
+    - go get -u golang.org/x/lint/golint
   script:
     - golint 
+  after_script:
+    - ls
 
 test:
+  stage: test
   script:
     - go test -cover
